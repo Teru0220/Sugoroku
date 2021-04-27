@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightyellow"
+    android:id="@+id/map_activity"
+    tools:context=".map.MapActivity">
+
+    <com.example.sugoroku.layout.DiagonalScrollView
+        android:id="@+id/vScroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.example.sugoroku.layout.DiagonalHorizontalScrollView
+                android:id="@+id/hScroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:id="@+id/frame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginBottom="50dp">
+
+                    <TableLayout
+                        android:id="@+id/table"
+                        android:layout_width="1500dp"
+                        android:layout_height="1500dp"
+                        android:orientation="vertical"
+                        android:weightSum="8"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE11"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC11"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE12"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC12"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="3"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/masuE12_5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC12_5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE13"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC13"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE21"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC21"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE22"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC22"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE23"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC23"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE31"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC31"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE32"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC32"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE33"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC33"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE41"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC41"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE42"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC42"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE43"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC43"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE51"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC51"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE52"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC52"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE53"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC53"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE61"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC61"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE62"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC62"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE63"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC63"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE71"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC71"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE72"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC72"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE73"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC73"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE81"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC81"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="1"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE81_5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC81_5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="2"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE82"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC82"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="0"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="3"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_column="4"
+                                android:layout_weight="1"
+                                android:background="@drawable/masu_background"
+                                android:orientation="vertical"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:id="@+id/masuE83"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/event"
+                                    android:textSize="24sp" />
+
+                                <TextView
+                                    android:id="@+id/musuC83"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginRight="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_weight="2"
+                                    android:text="@string/change"
+                                    android:textColor="@color/red"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
+                        </TableRow>
+                    </TableLayout>
+                    <!--ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/neko1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" /-->
+
+                </FrameLayout>
+            </com.example.sugoroku.layout.DiagonalHorizontalScrollView>
+        </LinearLayout>
+    </com.example.sugoroku.layout.DiagonalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

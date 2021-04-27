@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="event_text_array26">
+        <item>@id/masuE11</item>
+        <item>@id/masuE21</item>
+        <item>@id/masuE31</item>
+        <item>@id/masuE41</item>
+        <item>@id/masuE51</item>
+        <item>@id/masuE61</item>
+        <item>@id/masuE71</item>
+        <item>@id/masuE81</item>
+        <item>@id/masuE81_5</item>
+        <item>@id/masuE82</item>
+        <item>@id/masuE72</item>
+        <item>@id/masuE62</item>
+        <item>@id/masuE52</item>
+        <item>@id/masuE42</item>
+        <item>@id/masuE32</item>
+        <item>@id/masuE22</item>
+        <item>@id/masuE12</item>
+        <item>@id/masuE12_5</item>
+        <item>@id/masuE13</item>
+        <item>@id/masuE23</item>
+        <item>@id/masuE33</item>
+        <item>@id/masuE43</item>
+        <item>@id/masuE53</item>
+        <item>@id/masuE63</item>
+        <item>@id/masuE73</item>
+        <item>@id/masuE83</item>
+    </array>
+    <array name="change_text_array26">
+        <item>@id/musuC11</item>
+        <item>@id/musuC21</item>
+        <item>@id/musuC31</item>
+        <item>@id/musuC41</item>
+        <item>@id/musuC51</item>
+        <item>@id/musuC61</item>
+        <item>@id/musuC71</item>
+        <item>@id/musuC81</item>
+        <item>@id/musuC81_5</item>
+        <item>@id/musuC82</item>
+        <item>@id/musuC72</item>
+        <item>@id/musuC62</item>
+        <item>@id/musuC52</item>
+        <item>@id/musuC42</item>
+        <item>@id/musuC32</item>
+        <item>@id/musuC22</item>
+        <item>@id/musuC12</item>
+        <item>@id/musuC12_5</item>
+        <item>@id/musuC13</item>
+        <item>@id/musuC23</item>
+        <item>@id/musuC33</item>
+        <item>@id/musuC43</item>
+        <item>@id/musuC53</item>
+        <item>@id/musuC63</item>
+        <item>@id/musuC73</item>
+        <item>@id/musuC83</item>
+    </array>
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Sugoroku</string>
+    <string name="change">change</string>
+    <string name="event">event</string>
+    <string name="map_name">マップ名</string>
+    <string name="masu_total">総マス数</string>
+    <string name="no_comment">コメントなし</string>
+
+    <string-array name="list">
+    <item>プレイヤー 4人、CPU 0人</item>
+    <item>プレイヤー 3人、CPU 1人</item>
+    <item>プレイヤー 2人、CPU 2人</item>
+    <item>プレイヤー 1人、CPU 4人</item>
+    </string-array>
+</resources>
