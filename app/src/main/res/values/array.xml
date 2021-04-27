@@ -56,4 +56,11 @@
         <item>@id/musuC73</item>
         <item>@id/musuC83</item>
     </array>
+
+    <string-array name="list">
+        <item>プレイヤー 4人、CPU 0人</item>
+        <item>プレイヤー 3人、CPU 1人</item>
+        <item>プレイヤー 2人、CPU 2人</item>
+        <item>プレイヤー 1人、CPU 4人</item>
+    </string-array>
 </resources>

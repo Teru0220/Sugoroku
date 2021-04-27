@@ -5,12 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:entries="@array/list"
+        android:scrollbarSize="24dp"
         android:spinnerMode="dialog" />
 
     <com.google.android.material.textfield.TextInputLayout

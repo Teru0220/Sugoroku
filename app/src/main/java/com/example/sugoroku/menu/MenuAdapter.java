@@ -2,10 +2,12 @@ package com.example.sugoroku.menu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
@@ -58,17 +60,19 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
                 popupWindow.setContentView(popupView);
                 popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
                 popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-                if(popupWindow.isShowing()){
-                    popupWindow.dismiss();
-                }else{
-                    popupWindow.showAsDropDown(view, 0, 0);
-                }
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0,0);
+                Button button = popupView.findViewById(R.id.button);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
 
-
-                Intent map26 = new Intent(context, MapActivity.class);
-                map26.putExtra("mapName",list.get(position).getTableName());
-                map26.putExtra("masuTotal",masuTotal);
-                context.startActivity(map26);
+                        Intent map26 = new Intent(context, MapActivity.class);
+                        map26.putExtra("mapName",list.get(position).getTableName());
+                        map26.putExtra("masuTotal",masuTotal);
+                        context.startActivity(map26);
+                    }
+                });
             }
         });
     }
