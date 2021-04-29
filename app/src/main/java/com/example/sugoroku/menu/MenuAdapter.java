@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.PopupWindow;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,25 +51,28 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
         holder.base.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater =
-                        (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_view, null);
-                popupView.setLayoutParams(new ViewGroup.LayoutParams
-                        (ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-                PopupWindow popupWindow = new PopupWindow(context);
-                popupWindow.setContentView(popupView);
-                popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-                popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0,0);
-                Button button = popupView.findViewById(R.id.button);
+                PopupWindow popupWindow = new PopupWindow(context,view);
+                popupWindow.showWindow();
+                Button button = popupWindow.getButton();
+                Spinner spinner = popupWindow.getSpinner();
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        popupWindow.dismiss();
+                        int playCPU = 0;
+                        if(spinner.getSelectedItem().toString().equals("プレイヤー 3人、CPU 1人")){
+                            playCPU = 1;
+                        }else if(spinner.getSelectedItem().toString().equals("プレイヤー 2人、CPU 2人")){
+                            playCPU = 2;
+                        }else if(spinner.getSelectedItem().toString().equals("プレイヤー 1人、CPU 3人")){
+                            playCPU = 3;
+                        }
+                        popupWindow.endWindow();
 
                         Intent map26 = new Intent(context, MapActivity.class);
                         map26.putExtra("mapName",list.get(position).getTableName());
                         map26.putExtra("masuTotal",masuTotal);
+                        map26.putExtra("playCPU",playCPU);
+                        map26.putExtra("playerName",popupWindow.getName());
                         context.startActivity(map26);
                     }
                 });

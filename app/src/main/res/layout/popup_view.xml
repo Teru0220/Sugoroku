@@ -22,6 +22,7 @@
         android:layout_height="wrap_content">
 
        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/player_name1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー1の名前"
@@ -34,6 +35,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/player_name2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー2の名前"
@@ -46,6 +48,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/player_name3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー3の名前"
@@ -58,6 +61,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/player_name4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー4の名前"

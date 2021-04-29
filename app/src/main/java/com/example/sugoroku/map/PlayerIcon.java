@@ -1,9 +1,12 @@
 package com.example.sugoroku.map;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.DrawFilter;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -15,17 +18,16 @@ import android.widget.ScrollView;
 
 import com.example.sugoroku.R;
 
+import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PlayerIcon {
-    private ImageView player;
-    private Bitmap playerImg;
+import static com.example.sugoroku.R.drawable.*;
 
-    private Bitmap upArrowImg;
-    private Bitmap leftArrowImg;
-    private Bitmap downArrowImg;
-    private Bitmap rightArrowImg;
+public class PlayerIcon {
+    private ImageView playerImg;
+    private Drawable[] iconImege = new Drawable[4];
+
     private ImageButton upArrow;
     private ImageButton leftArrow;
     private ImageButton downArrow;
@@ -48,54 +50,59 @@ public class PlayerIcon {
     private int timerCount = 0;
 
     private Context context;
+    private GameMaster gameMaster;
 
-
-    public PlayerIcon(Context context, FrameLayout frameLayout,
-                      int musuHeight, int musuWidth,int wDisplar,int hDisplay,int[][] masuCoordinate,
-                      ScrollView scrollView,HorizontalScrollView horizontalScrollView){
+    public PlayerIcon(Context context, FrameLayout frameLayout, int[][] masuCoordinate,
+                      ScrollView scrollView,HorizontalScrollView horizontalScrollView,GameMaster gameMaster){
         this.context = context;
         this.frameLayout = frameLayout;
-        this.musuHeight = musuHeight;
-        this.musuWidth = musuWidth;
-        this.wDisplay = wDisplar;
-        this.hDisplay = hDisplay;
+        this.musuHeight = MapActivity.musuHeight;
+        this.musuWidth = MapActivity.musuWidth;
+        this.wDisplay = MapActivity.wDisplay;
+        this.hDisplay = MapActivity.hDisplay;
         this.masuCoordinate = masuCoordinate;
         this.scrollView = scrollView;
         this.horizontalScrollView = horizontalScrollView;
-        this.scrollNowXY = new float[]{horizontalScrollView.getX(), scrollView.getY()};
-        this.playerImg = BitmapFactory.decodeResource(context.getResources(), R.drawable.neko1);
-        this.upArrowImg = BitmapFactory.decodeResource(context.getResources(), R.drawable.up_arrow);
-        this.leftArrowImg = BitmapFactory.decodeResource(context.getResources(),R.drawable.left_arrow);
-        this.downArrowImg = BitmapFactory.decodeResource(context.getResources(),R.drawable.down_arrow);
-        this.rightArrowImg = BitmapFactory.decodeResource(context.getResources(),R.drawable.right_arrow);
+        this.scrollNowXY = new float[]{0.0f, 0.0f};
+        this.gameMaster = gameMaster;
+        TypedArray Img = context.getResources().obtainTypedArray(R.array.icon);
+        for (int i = 0;i<iconImege.length;i++)
+        this.iconImege[i] = Img.getDrawable(i);
     }
 
-    public void makePlayerIcon(){
-        player = new ImageView(context);
-        player.setImageBitmap(playerImg);
-        player.setBackgroundColor(Color.TRANSPARENT);
-        player.setX(tablePlayerXY[0]);
-        player.setY(tablePlayerXY[1]);
+    public void makePlayerIcon(int imgNumber){
+        playerImg = new ImageView(context);
+        playerImg.setImageDrawable(iconImege[imgNumber]);
+        playerImg.setScaleType(ImageView.ScaleType.FIT_XY);
+        playerImg.setBackgroundColor(Color.TRANSPARENT);
+        playerImg.setX(tablePlayerXY[0]);
+        playerImg.setY(tablePlayerXY[1]);
         wPlayerXY = masuCoordinate[0];
         FrameLayout.LayoutParams layer1= new FrameLayout.LayoutParams(musuWidth ,musuHeight);
-        frameLayout.addView(player,layer1);
+        frameLayout.addView(playerImg,layer1);
     }
     //生成する矢印を指定
     public void makeArrows(MasuData masuData){
-        removeArrows();
-
-        if(masuData.getUpNextNumber() > -1){
-            //次のマスのウィンドウ座標を取得
-            makeUpArrow(masuData.getUpNextNumber());
-        }
-        if(masuData.getLeftNextNumber() > -1){
-            makeLeftArrow(masuData.getLeftNextNumber());
-        }
-        if(masuData.getDownNextNumber() > -1){
-            makeDownArrow(masuData.getDownNextNumber());
-        }
-        if(masuData.getRightNextNumber() > -1){
-            makeRightArrow(masuData.getRightNextNumber());
+        gameMaster.textWindow.setText("残り　" + gameMaster.movePoint + "マス");
+        if(gameMaster.movePoint > 0) {
+            removeArrows();
+            if (masuData.getUpNextNumber() > -1) {
+                //次のマスのウィンドウ座標を取得
+                makeUpArrow(masuData.getUpNextNumber());
+            }
+            if (masuData.getLeftNextNumber() > -1) {
+                makeLeftArrow(masuData.getLeftNextNumber());
+            }
+            if (masuData.getDownNextNumber() > -1) {
+                makeDownArrow(masuData.getDownNextNumber());
+            }
+            if (masuData.getRightNextNumber() > -1) {
+                makeRightArrow(masuData.getRightNextNumber());
+            }
+            gameMaster.movePoint--;
+        }else {
+            //最後に止まったマスでイベント発生
+            gameMaster.event(masuData.getChangeMoney());
         }
     }
     //矢印の破棄
@@ -108,7 +115,8 @@ public class PlayerIcon {
     //上矢印生成
     private void makeUpArrow(int upNextMasu){
         upArrow = new ImageButton(context);
-        upArrow.setImageBitmap(upArrowImg);
+        upArrow.setImageResource(up_arrow);
+        upArrow.setScaleType(ImageView.ScaleType.FIT_XY);
         upArrow.setBackgroundColor(Color.TRANSPARENT);
         upArrow.setX(tablePlayerXY[0] + (musuWidth /3.0f));
         upArrow.setY(tablePlayerXY[1] -(musuHeight/3.5f));
@@ -126,7 +134,8 @@ public class PlayerIcon {
 
     private void makeLeftArrow(int leftNextMasu){
         leftArrow = new ImageButton(context);
-        leftArrow.setImageBitmap(leftArrowImg);
+        leftArrow.setImageResource(left_arrow);
+        leftArrow.setScaleType(ImageView.ScaleType.FIT_XY);
         leftArrow.setBackgroundColor(Color.TRANSPARENT);
         leftArrow.setX(tablePlayerXY[0]);
         leftArrow.setY(tablePlayerXY[1] + musuHeight/4.0f);
@@ -143,7 +152,8 @@ public class PlayerIcon {
 
     private void makeDownArrow(int downNextMasu){
         downArrow = new ImageButton(context);
-        downArrow.setImageBitmap(downArrowImg);
+        downArrow.setImageResource(down_arrow);
+        downArrow.setScaleType(ImageView.ScaleType.FIT_XY);
         downArrow.setBackgroundColor(Color.TRANSPARENT);
         downArrow.setX(tablePlayerXY[0] + (musuWidth /3.0f));
         downArrow.setY(tablePlayerXY[1] + (musuHeight -(musuHeight/6.0f)));
@@ -160,7 +170,8 @@ public class PlayerIcon {
 
     private void makeRightArrow(int rightNextMasu){
         rightArrow = new ImageButton(context);
-        rightArrow.setImageBitmap(rightArrowImg);
+        rightArrow.setImageResource(right_arrow);
+        rightArrow.setScaleType(ImageView.ScaleType.FIT_XY);
         rightArrow.setBackgroundColor(Color.TRANSPARENT);
         rightArrow.setX(tablePlayerXY[0] + (musuWidth-(musuHeight / 2.0f)));
         rightArrow.setY(tablePlayerXY[1] + (musuHeight / 4.0f));
@@ -174,6 +185,23 @@ public class PlayerIcon {
         FrameLayout.LayoutParams arrowLayerH= new FrameLayout.LayoutParams(musuHeight/2,musuWidth/3);
         frameLayout.addView(rightArrow,arrowLayerH);
     }
+    //進んだあとに少し時間を開けて矢印を生成する
+    private void arrowSetTime(MasuData masuData){
+        Handler handler = new Handler();
+        TimerTask task = new TimerTask() {//タイマーに伴う作業を設定。
+            @Override
+            public void run() {
+                handler.post(new Runnable(){
+                    @Override
+                    public void run() {
+                        makeArrows(masuData);
+                    }
+                });
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task,110L);
+    }
 
     private void iconMove(int newNextMasu){
         calcXY(wPlayerXY,masuCoordinate[newNextMasu], tableNextMasuXY);
@@ -183,7 +211,7 @@ public class PlayerIcon {
                 Animation.ABSOLUTE, tablePlayerXY[1],
                 Animation.ABSOLUTE, tableNextMasuXY[1]
         );
-        //スクロール用に移動量を計算
+        //スクロール用に移動量を計算,なめらかにスクロールしているようにに見せるためスクロール移動を10分割
         float[] nowXY = {(tablePlayerXY[0] + wPlayerXY[0] - (wDisplay/5.0f)),
                 (tablePlayerXY[1] + wPlayerXY[1] - (hDisplay/2.0f))};
         float[] moveXY = {((tableNextMasuXY[0]- tablePlayerXY[0]) / 10.0f),
@@ -195,8 +223,8 @@ public class PlayerIcon {
         translateAnimation.setDuration(100L);//実行時間ｍｓ
         translateAnimation.setRepeatCount(0);//繰り返し回数
         translateAnimation.setFillAfter(true);//実行後のViewをそのままにするか
-        player.startAnimation(translateAnimation);
-        //なめらかにスクロールしているようにに見せるためスクロール移動を10分割
+        playerImg.startAnimation(translateAnimation);
+        //10ミリ秒ごとに10回スクロールを実行
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -207,21 +235,31 @@ public class PlayerIcon {
                 if(timerCount > 10){
                     timerCount = 0;
                     cancel();
+                    scrollNowXY[0] = nowXY[0];
+                    scrollNowXY[1] = nowXY[1];
                 }
                 timerCount++;
             }
         };
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(timerTask,0,10);//10ミリ秒ごとに繰り返し
-        this.scrollNowXY[0] = horizontalScrollView.getX();
-        this.scrollNowXY[1] = scrollView.getY();
 
         nowPoint = newNextMasu;
+        arrowSetTime(gameMaster.masuData[nowPoint]);
     }
+
     //次のマスの絶対座標と今のマスの絶対座標の差を計算し、相対座標をすすめる値を求める。
     private void calcXY(int[] now,int[] next,float[] retn){
         retn[0] = (float) (next[0] - now[0]);
         retn[1] = (float) (next[1] - now[1]);
     }
 
+    public ImageView getPlayerImg(){
+        return this.playerImg;
+    }
+
+    public void scrollNext(){
+        horizontalScrollView.scrollTo((int)Math.ceil(scrollNowXY[0]),0);
+        scrollView.scrollTo(0,(int)Math.ceil(scrollNowXY[1]));
+    }
 }

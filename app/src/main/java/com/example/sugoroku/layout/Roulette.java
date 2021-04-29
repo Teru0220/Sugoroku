@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -17,45 +18,56 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import com.example.sugoroku.R;
+import com.example.sugoroku.map.GameMaster;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 //一回タップしたあと乱数を生成しその分回すルーレット
 public class Roulette extends FrameLayout implements View.OnClickListener{
     private ImageButton roulette;
     private ImageView frame;
-    private boolean flag = true;
-    private Bitmap rouletteImg;
-    private Bitmap rouletteFrameImg;
     private RotateAnimation rotateAnimation1;
-    public static int rouletteNumber;
+    public int rouletteNumber;
+    private float randomTime;
 
-    public Roulette(@NonNull Context context) {
+    private GameMenuWindow textWindow;
+    private GameMaster gameMaster;
+
+    public Roulette(@NonNull Context context,GameMaster gameMaster,GameMenuWindow textWindow) {
         super(context);
+        this.textWindow = textWindow;
+        this.gameMaster = gameMaster;
+
         View layout = LayoutInflater.from(context).inflate(R.layout.roulette,this);
         roulette = layout.findViewById(R.id.roulette);
         roulette.setOnClickListener(this);
-        rouletteImg = BitmapFactory.decodeResource(context.getResources(),R.drawable.roulette);
-        roulette.setImageBitmap(rouletteImg);
+        roulette.setImageResource(R.drawable.roulette);
         //画像の大きさをViewの大きさに合わせる。
         roulette.setScaleType(ImageView.ScaleType.FIT_XY);
 
         frame = layout.findViewById(R.id.frame);
-        rouletteFrameImg = BitmapFactory.decodeResource(context.getResources(),R.drawable.roulette_needle);
-        frame.setImageBitmap(rouletteFrameImg);
+        frame.setImageResource(R.drawable.roulette_needle);
         frame.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
     @Override
     public void onClick(View v) {
+        //テキストウィンドウを消す
+        textWindow.invisible();
+        //ランダムで生成した数値+20回ルーレットを回す。
         int random = new java.util.Random().nextInt(360)+1;
-        float randomNumber = random +1800.0f ;
+        randomTime = random +1800.0f ;
         rotateAnimation1= new RotateAnimation(
-                0.0f, randomNumber,
+                0.0f, randomTime,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
-        rotateAnimation1.setDuration((long) randomNumber);
+        rotateAnimation1.setDuration((long) randomTime);
         rotateAnimation1.setRepeatCount(0);
         rotateAnimation1.setFillAfter(true);
         roulette.startAnimation(rotateAnimation1);
+        //乱数からすすめる目を算出
         if (random < 31 || random > 330 ) {
             rouletteNumber = 1;
         }else if(random < 91){
@@ -69,6 +81,26 @@ public class Roulette extends FrameLayout implements View.OnClickListener{
         }else {
             rouletteNumber = 6;
         }
+        //ルーレットの回転が収まって少ししてからルーレットを消す。
+        invisible();
+    }
 
+    public void invisible(){
+        Roulette rouletteView = this;
+        Handler handler = new Handler();
+        TimerTask task = new TimerTask() {//タイマーに伴う作業を設定。
+            @Override
+            public void run() {
+                handler.post(new Runnable(){
+                        @Override
+                        public void run() {
+                            rouletteView.setVisibility(View.GONE);
+                            gameMaster.move(rouletteNumber);
+                    }
+                });
+            }
+        };
+        Timer timer = new Timer();//タイマーの作成
+        timer.schedule(task,(long)randomTime + 1000L);
     }
 }

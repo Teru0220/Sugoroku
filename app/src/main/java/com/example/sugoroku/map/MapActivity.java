@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -38,19 +39,18 @@ public class MapActivity extends AppCompatActivity {
     private int[][] masuCoordinate;
     private int masuTotal;
 
-    protected int musuHeight;
-    protected int musuWidth;
-    protected int wDisplay;
-    protected int hDisplay;
+    protected static int musuHeight;
+    protected static int musuWidth;
+    protected static int wDisplay;
+    protected static int hDisplay;
     protected FrameLayout frameLayout;
-
-    private PlayerIcon playerIcon;
-    private Player player;
 
     private Roulette roulette;
 
     private MapOpenHelper helper;//SQLの操作用
     private SQLiteDatabase db;//DBファイル
+
+    private boolean startFlag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,6 @@ public class MapActivity extends AppCompatActivity {
         display.getSize(point);
         wDisplay = point.x;
         hDisplay = point.y;
-
 
         eventView = new TextView[masuTotal];
         changeView = new TextView[masuTotal];
@@ -100,12 +99,27 @@ public class MapActivity extends AppCompatActivity {
         for(int i =0;i <masuCoordinate.length;i++){
             eventView[i].getLocationInWindow(masuCoordinate[i]);
         }
-        //プレイヤーアイコンを作成
-        playerIcon = new PlayerIcon(this,frameLayout,musuHeight,musuWidth, wDisplay, hDisplay,
-                masuCoordinate,scrollView,horizontalScrollView);
-        playerIcon.makePlayerIcon();
-        //プレイヤー情報の入力
-        player = new Player("マリン", 1000, playerIcon);
+        String[] name = getIntent().getStringArrayExtra("playerName");
+        Player[] players = new Player[4];
+
+        if(startFlag) {
+            GameMaster gameMaster = new GameMaster(players, masuData, this, constraintLayout);
+            for(int i = 0;i< players.length;i++) {
+                //プレイヤーアイコンを作成
+                PlayerIcon playerIcon = new PlayerIcon(this, frameLayout,
+                        masuCoordinate, scrollView, horizontalScrollView,gameMaster);
+                //プレイヤー情報の入力
+                players[i] = new Player(name[i], 1000, playerIcon,i);
+            }
+            gameMaster.StartGeme();
+            startFlag = false;
+        }
+    }
+
+   @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        finish();
+        return true;
     }
 
     //DBからのデータ呼び出し
@@ -146,10 +160,6 @@ public class MapActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN://指を付けたとき
-                //テスト用
-                makeRolette();
-                player.getIcon().makeArrows(masuData[player.getIcon().nowPoint]);
-                //
                 moveX = event.getX();
                 moveY = event.getY();
                 break;
@@ -164,12 +174,5 @@ public class MapActivity extends AppCompatActivity {
             case MotionEvent.ACTION_UP://指を離した動き
         }
         return true;
-    }
-    public void makeRolette(){
-        roulette = new Roulette(this);
-        roulette.setX((playerIcon.scrollNowXY[0]+ wDisplay)-(wDisplay/2.0f));
-        roulette.setY((playerIcon.scrollNowXY[1] + hDisplay) -(wDisplay/1.5f));
-        ConstraintLayout.LayoutParams leyer= new ConstraintLayout.LayoutParams((int)Math.ceil(wDisplay/2.5f),(int)Math.ceil(wDisplay/2.5f));
-        constraintLayout.addView(roulette,leyer);
     }
 }
