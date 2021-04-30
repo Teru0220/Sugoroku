@@ -1,8 +1,6 @@
-package com.example.sugoroku.menu;
+package com.example.sugoroku.layout;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.TypedArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +11,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.sugoroku.R;
-import com.example.sugoroku.map.MapActivity;
 
-public class PopupWindow {
+public class SettingPopupWindow {
 
     private Context context;
     private View view;
@@ -24,7 +21,7 @@ public class PopupWindow {
     private String[] name= new String[4];
     private android.widget.PopupWindow popupWindow;
 
-    public PopupWindow(Context context,View view){
+    public SettingPopupWindow(Context context, View view){
         this.context = context;
         this.view = view;
     }
@@ -32,7 +29,7 @@ public class PopupWindow {
     public void showWindow(){
         LayoutInflater inflater =
                 (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-         View popupView = inflater.inflate(R.layout.popup_view, null);
+         View popupView = inflater.inflate(R.layout.setting_popup_view, null);
         popupView.setLayoutParams(new ViewGroup.LayoutParams
                 (ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
         popupWindow = new android.widget.PopupWindow(context);

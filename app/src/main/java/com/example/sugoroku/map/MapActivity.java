@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.example.sugoroku.R;
 import com.example.sugoroku.layout.Roulette;
 
-//　　4/24 縦横移動スクロール追尾完了。スクロールが早すぎるかも
+//　　4/30 ゲーム完了までの流れを完成。CPUはまだ前にしか進めないためゴールできない。全員プレイヤーでゴールの検証が必要。
 public class MapActivity extends AppCompatActivity {
     //スクロールビューのためのフィールド
     private float moveX;
@@ -45,12 +45,15 @@ public class MapActivity extends AppCompatActivity {
     protected static int hDisplay;
     protected FrameLayout frameLayout;
 
-    private Roulette roulette;
+    public static int startPoint = 0;
+    public static int goalPoint = 0;
 
     private MapOpenHelper helper;//SQLの操作用
     private SQLiteDatabase db;//DBファイル
 
     private boolean startFlag = true;
+
+    private GameMaster gameMaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,15 +104,24 @@ public class MapActivity extends AppCompatActivity {
         }
         String[] name = getIntent().getStringArrayExtra("playerName");
         Player[] players = new Player[4];
+        int playCPU = getIntent().getIntExtra("playCPU",0);
 
         if(startFlag) {
-            GameMaster gameMaster = new GameMaster(players, masuData, this, constraintLayout);
-            for(int i = 0;i< players.length;i++) {
+            gameMaster = new GameMaster(players, masuData, this, constraintLayout);
+            for(int i = 0;i< players.length-playCPU;i++) {
                 //プレイヤーアイコンを作成
                 PlayerIcon playerIcon = new PlayerIcon(this, frameLayout,
                         masuCoordinate, scrollView, horizontalScrollView,gameMaster);
                 //プレイヤー情報の入力
                 players[i] = new Player(name[i], 1000, playerIcon,i);
+            }
+            for(int i = players.length-playCPU;i< players.length;i++) {
+                //プレイヤーアイコンを作成
+                PlayerIcon playerIcon = new PlayerIcon(this, frameLayout,
+                        masuCoordinate, scrollView, horizontalScrollView,gameMaster);
+                //プレイヤー情報の入力
+                players[i] = new Player(name[i], 1000, playerIcon,i);
+                players[i].setCpu();
             }
             gameMaster.StartGeme();
             startFlag = false;
@@ -150,6 +162,8 @@ public class MapActivity extends AppCompatActivity {
                     cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getInt(6),eventView[i]);
             eventView[i].setText(masuData[i].getEvent());
             changeView[i].setText(masuData[i].getChangeEvent());
+            if(masuData[i].getEvent().equals("スタート")){this.startPoint = i;}
+            if(masuData[i].getEvent().equals("ゴール")){this.goalPoint = i;}
             cursor.moveToNext();
         }
         //SQLの終了
@@ -158,6 +172,9 @@ public class MapActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(gameMaster.players[gameMaster.turn].isCpu()){
+            return true;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN://指を付けたとき
                 moveX = event.getX();

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/menu_window_back"
+    android:orientation="vertical"
+    android:layout_weight="5">
+
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:gravity="center|left"
+        android:text="TextView\nTextView"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/turn_end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:text="閉じる"
+        android:layout_weight="4"/>
+</LinearLayout>

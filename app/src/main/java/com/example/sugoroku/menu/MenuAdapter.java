@@ -2,17 +2,16 @@ package com.example.sugoroku.menu;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sugoroku.layout.SettingPopupWindow;
 import com.example.sugoroku.map.MapActivity;
 import com.example.sugoroku.R;
 
@@ -51,10 +50,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
         holder.base.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupWindow popupWindow = new PopupWindow(context,view);
-                popupWindow.showWindow();
-                Button button = popupWindow.getButton();
-                Spinner spinner = popupWindow.getSpinner();
+                SettingPopupWindow settingPopupWindow = new SettingPopupWindow(context,view);
+                settingPopupWindow.showWindow();
+                Button button = settingPopupWindow.getButton();
+                Spinner spinner = settingPopupWindow.getSpinner();
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -66,13 +65,13 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
                         }else if(spinner.getSelectedItem().toString().equals("プレイヤー 1人、CPU 3人")){
                             playCPU = 3;
                         }
-                        popupWindow.endWindow();
+                        settingPopupWindow.endWindow();
 
                         Intent map26 = new Intent(context, MapActivity.class);
                         map26.putExtra("mapName",list.get(position).getTableName());
                         map26.putExtra("masuTotal",masuTotal);
                         map26.putExtra("playCPU",playCPU);
-                        map26.putExtra("playerName",popupWindow.getName());
+                        map26.putExtra("playerName", settingPopupWindow.getName());
                         context.startActivity(map26);
                     }
                 });

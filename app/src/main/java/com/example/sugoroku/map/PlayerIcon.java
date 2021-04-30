@@ -19,6 +19,8 @@ import android.widget.ScrollView;
 import com.example.sugoroku.R;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -43,6 +45,8 @@ public class PlayerIcon {
     float[] tablePlayerXY = {0.0f, 0.0f};
     float[] tableNextMasuXY = {0.0f, 0.0f};
     int[][] masuCoordinate;
+    public List<Integer> logList = new ArrayList<>();
+    public List<Integer> turnLogList = new ArrayList<>();
 
     private ScrollView scrollView;
     private HorizontalScrollView horizontalScrollView;
@@ -80,6 +84,7 @@ public class PlayerIcon {
         wPlayerXY = masuCoordinate[0];
         FrameLayout.LayoutParams layer1= new FrameLayout.LayoutParams(musuWidth ,musuHeight);
         frameLayout.addView(playerImg,layer1);
+        this.logList.add(nowPoint);
     }
     //生成する矢印を指定
     public void makeArrows(MasuData masuData){
@@ -99,10 +104,11 @@ public class PlayerIcon {
             if (masuData.getRightNextNumber() > -1) {
                 makeRightArrow(masuData.getRightNextNumber());
             }
-            gameMaster.movePoint--;
         }else {
             //最後に止まったマスでイベント発生
-            gameMaster.event(masuData.getChangeMoney());
+            turnLogList.clear();
+            turnLogList.add(logList.get(logList.size()-1));
+            gameMaster.event(masuData.getEvent(),masuData.getChangeEvent(),masuData.getChangeMoney());
         }
     }
     //矢印の破棄
@@ -124,7 +130,7 @@ public class PlayerIcon {
             @Override
             public void onClick(View v) {
                 removeArrows();
-                iconMove(upNextMasu);
+                iconMove(upNextMasu,false);
             }
         });
         //矢印アイコンの大きさ調整
@@ -143,7 +149,7 @@ public class PlayerIcon {
             @Override
             public void onClick(View v) {
                 removeArrows();
-                iconMove(leftNextMasu);
+                iconMove(leftNextMasu,false);
             }
         });
         FrameLayout.LayoutParams arrowLayerH= new FrameLayout.LayoutParams(musuHeight/2,musuWidth/3);
@@ -161,7 +167,7 @@ public class PlayerIcon {
             @Override
             public void onClick(View v) {
                 removeArrows();
-                iconMove(downNextMasu);
+                iconMove(downNextMasu,false);
             }
         });
         FrameLayout.LayoutParams arrowLayerH= new FrameLayout.LayoutParams(musuWidth/3,musuHeight/2);
@@ -179,14 +185,14 @@ public class PlayerIcon {
             @Override
             public void onClick(View v) {
                 removeArrows();
-                iconMove(rightNextMasu);
+                iconMove(rightNextMasu,false);
             }
         });
         FrameLayout.LayoutParams arrowLayerH= new FrameLayout.LayoutParams(musuHeight/2,musuWidth/3);
         frameLayout.addView(rightArrow,arrowLayerH);
     }
     //進んだあとに少し時間を開けて矢印を生成する
-    private void arrowSetTime(MasuData masuData){
+    private void arrowSetTime(MasuData masuData,boolean cpu){
         Handler handler = new Handler();
         TimerTask task = new TimerTask() {//タイマーに伴う作業を設定。
             @Override
@@ -194,16 +200,22 @@ public class PlayerIcon {
                 handler.post(new Runnable(){
                     @Override
                     public void run() {
-                        makeArrows(masuData);
+                       if(!cpu) {
+                            makeArrows(masuData);
+                       }else {
+                            gameMaster.moveCPU();
+                        }
                     }
                 });
             }
         };
         Timer timer = new Timer();
-        timer.schedule(task,110L);
+        long delay = cpu ? 500L : 110L;
+        timer.schedule(task,delay);
     }
 
-    private void iconMove(int newNextMasu){
+    public void iconMove(int newNextMasu,boolean cpu){
+        this.turnLogList.add(nowPoint);
         calcXY(wPlayerXY,masuCoordinate[newNextMasu], tableNextMasuXY);
         TranslateAnimation translateAnimation = new TranslateAnimation(
                 Animation.ABSOLUTE, tablePlayerXY[0],
@@ -245,7 +257,16 @@ public class PlayerIcon {
         timer.scheduleAtFixedRate(timerTask,0,10);//10ミリ秒ごとに繰り返し
 
         nowPoint = newNextMasu;
-        arrowSetTime(gameMaster.masuData[nowPoint]);
+        if(turnLogList.size() < 2 ||turnLogList.get(turnLogList.size()-2) != nowPoint) {
+            gameMaster.movePoint--;
+            this.logList.add(nowPoint);
+        }else {
+            gameMaster.movePoint++;
+            this.turnLogList.remove(turnLogList.size() -1);
+            this.turnLogList.remove(turnLogList.size() -1);
+            this.logList.remove(logList.size()-1);
+        }
+        arrowSetTime(gameMaster.masuData[nowPoint],cpu);
     }
 
     //次のマスの絶対座標と今のマスの絶対座標の差を計算し、相対座標をすすめる値を求める。
@@ -254,6 +275,7 @@ public class PlayerIcon {
         retn[1] = (float) (next[1] - now[1]);
     }
 
+    public int getNowPoint(){return this.nowPoint;}
     public ImageView getPlayerImg(){
         return this.playerImg;
     }
