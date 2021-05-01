@@ -36,11 +36,9 @@ public class GameMaster {
     private int turntable= 0;
     protected int turn;
     protected int movePoint = 0;
-    private ConstraintLayout.LayoutParams leyer1;
-    private ConstraintLayout.LayoutParams leyer2;
-    private ConstraintLayout.LayoutParams leyer3;
     private StringBuilder text = new StringBuilder();
     private boolean endFlag = false;
+    private boolean backMove = false;
 
     public GameMaster(Player[] players, MasuData[] masuData, Context context,ConstraintLayout constraintLayout){
         this.players = players;
@@ -54,9 +52,9 @@ public class GameMaster {
             players[i].getIcon().makePlayerIcon(players[i].getImgNumber());
             players[i].getIcon().getPlayerImg().setVisibility(View.GONE);
         }
-        makeTextWindow(players[turn]);
-        makeEventMsgWindow(players[turn]);
-        makeRoulette(players[turn],textWindow);
+        makeTextWindow();
+        makeEventMsgWindow();
+        makeRoulette();
 
         text.append(textWindow.getText());
         orderPlay();
@@ -64,9 +62,6 @@ public class GameMaster {
 
     public void orderPlay(){
         turn = turntable % 4;
-        if(turn == 0 && players[0].isGoal() && players[1].isGoal()&& players[2].isGoal()&& players[3].isGoal()){
-            gameEng();
-        }
         players[turn].getIcon().scrollNext();
         players[turn].getIcon().getPlayerImg().setVisibility(View.VISIBLE);
         players[turn].getIcon().getPlayerImg().bringToFront();
@@ -81,37 +76,41 @@ public class GameMaster {
                 rouletteView.rouletteEvent();
             }
         }else {
-            event("ゴールボーナス発生"," ",0);
+            if(turn == 0 && players[0].isGoal() && players[1].isGoal()&& players[2].isGoal()&& players[3].isGoal()){
+                gameEng();
+            }else {
+                event("ゴールボーナス発生", " ", 0);
+            }
         }
     }
-    //プレイヤーの初期値から表示位置を算出。メッセージ変更用にtextWindowを渡す。
-    public void makeRoulette(Player player,GameMenuWindow textWindow){
+    //メッセージ変更用にtextWindowを渡す。
+    public void makeRoulette(){
         rouletteView = new Roulette(context,this,textWindow);
-        rouletteView.setX(player.getIcon().scrollNowXY[0]+ wDisplay -(wDisplay/2.0f));
-        rouletteView.setY((player.getIcon().scrollNowXY[1] + MapActivity.hDisplay) -(wDisplay/1.5f));
-        leyer1= new ConstraintLayout.LayoutParams((int)Math.ceil(wDisplay/2.5f),(int)Math.ceil(wDisplay/2.5f));
-        constraintLayout.addView(rouletteView,leyer1);
+        rouletteView.setX(wDisplay -(wDisplay/2.0f));
+        rouletteView.setY((MapActivity.hDisplay) -(wDisplay/1.5f));
+        ConstraintLayout.LayoutParams leyer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 2.5f), (int) Math.ceil(wDisplay / 2.5f));
+        constraintLayout.addView(rouletteView, leyer1);
         rouletteView.setVisibility(View.GONE);
     }
 
-    public void makeTextWindow(Player player){
+    public void makeTextWindow(){
         textWindow = new GameMenuWindow(context);
-        textWindow.setX(player.getIcon().scrollNowXY[0]+ wDisplay -(wDisplay/2.5f));
-        textWindow.setY(player.getIcon().scrollNowXY[1]);
-        leyer2= new ConstraintLayout.LayoutParams((int)Math.ceil(wDisplay/2.5f),(int)Math.ceil(wDisplay/5.0f));
-        constraintLayout.addView(textWindow,leyer2);
+        textWindow.setX(wDisplay/5.0f * 3);
+        textWindow.setY(0);
+        ConstraintLayout.LayoutParams leyer2 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 5.0f * 2), (int) Math.ceil(wDisplay / 5.0f));
+        constraintLayout.addView(textWindow, leyer2);
         textWindow.invisible();
     }
 
-    public void makeEventMsgWindow(Player player){
+    public void makeEventMsgWindow(){
         eventMsgWindow = new GameEventMsgWindow(context);
-        eventMsgWindow.setX(player.getIcon().scrollNowXY[0] + (wDisplay/6.0f));
-        eventMsgWindow.setY(player.getIcon().scrollNowXY[1]+(hDisplay/5.0f));
+        eventMsgWindow.setX(wDisplay/6.0f);
+        eventMsgWindow.setY(hDisplay/5.0f);
 
         eventMsgWindow.getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(endFlag){((MapActivity)context).finish();}
+                if(endFlag && turn == 0){((MapActivity)context).finish();}
                 if(!players[turn].isCpu()) {
                     eventMsgWindow.invisible();
                     orderPlay();
@@ -119,17 +118,19 @@ public class GameMaster {
             }
         });
 
-        leyer3= new ConstraintLayout.LayoutParams((int)Math.ceil(wDisplay/1.5f),(int)Math.ceil(wDisplay/1.5f));
-        constraintLayout.addView(eventMsgWindow,leyer3);
+        ConstraintLayout.LayoutParams leyer3 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 1.5f), (int) Math.ceil(wDisplay / 1.5f));
+        constraintLayout.addView(eventMsgWindow, leyer3);
         eventMsgWindow.invisible();
     }
     //矢印を生成する回数を調整する
     public void move(int moveCount){
         this.movePoint = moveCount;
+        players[turn].getIcon().turnLogList.add(players[turn].getIcon().nowPoint);
         if(!players[turn].isCpu()) {
             players[turn].getIcon().makeArrows(masuData[players[turn].getIcon().nowPoint]);
         }else {
-           moveCPU();
+            backMove = false;
+            moveCPU();
         }
     }
 
@@ -138,24 +139,21 @@ public class GameMaster {
         textWindow.setText("残り　" + movePoint + "マス");
         if(movePoint >0) {
             int[] nextMasu = new int[4];
-            boolean flag = false;
             for (int i = 0; i < movePoint; i++) {
-                nextMasu[0] = masuData[players[turn].getIcon().getNowPoint()].getUpNextNumber();
-                nextMasu[1] = masuData[players[turn].getIcon().getNowPoint()].getLeftNextNumber();
-                nextMasu[2] = masuData[players[turn].getIcon().getNowPoint()].getDownNextNumber();
-                nextMasu[3] = masuData[players[turn].getIcon().getNowPoint()].getRightNextNumber();
-                for (int nextNumber : nextMasu) {
-                    if (!players[turn].getIcon().logList.contains(nextNumber) && nextNumber > -1) {
-                        players[turn].getIcon().iconMove(nextNumber, true);
-                        flag = true;
-                        break;
-                    }
-                }
-                if(flag){
-                    break;
+                nextMasu[3] = masuData[players[turn].getIcon().getNowPoint()].getUpNextNumber();
+                nextMasu[2] = masuData[players[turn].getIcon().getNowPoint()].getLeftNextNumber();
+                nextMasu[1] = masuData[players[turn].getIcon().getNowPoint()].getDownNextNumber();
+                nextMasu[0] = masuData[players[turn].getIcon().getNowPoint()].getRightNextNumber();
+            }
+            //ゴールできなかったときの処理。logをもどるだけなので改良が必要
+            if(backMove || !moveCPUYesOrNo(nextMasu)){
+                if(players[turn].getIcon().logList.size() > 1) {
+                    players[turn].getIcon().iconMove(players[turn].getIcon().logList.get(players[turn].getIcon().logList.size() - 2), true);
+                    backMove = true;
                 }
             }
         }else {
+            players[turn].getIcon().turnLogList.clear();
             event(masuData[players[turn].getIcon().getNowPoint()].getEvent(),
                     masuData[players[turn].getIcon().getNowPoint()].getChangeEvent(),
                     masuData[players[turn].getIcon().getNowPoint()].getChangeMoney());
@@ -171,8 +169,9 @@ public class GameMaster {
             textWindow.setText(text.toString());
             turntable++;
         }else{
+            //ゴールフラグを建てる
             if(!players[turn].isGoal()){players[turn].setGoal(true);}
-            eventWindowShow(event, "ゴールボーナス所持金×1.2");
+            eventWindowShow(event, "ゴールボーナス\n所持金×1.2");
             players[turn].setMoney((int)(players[turn].getMoney() * 1.2));
             text.delete(0, text.length());
             text.append(players[turn].getName()).append("\n").append("所持金:").append(players[turn].getMoney());
@@ -225,10 +224,20 @@ public class GameMaster {
             }
         }
         for (int i = 0; i< ranking.size();i++){
-            windowMsg.append("第　" + (i + 1) + "位  " + ranking.get(i) + "さん\n\n");
+            windowMsg.append("第" + (i + 1) + "位  " + ranking.get(i) + "さん\n\n");
         }
         eventMsgWindow.setMsgView(windowMsg);
         eventMsgWindow.visible();
         endFlag = true;
+    }
+
+    public boolean moveCPUYesOrNo(int[] masu){
+        for(int i : masu){
+            if(!players[turn].getIcon().logList.contains(i) && i > -1) {
+                players[turn].getIcon().iconMove(i, true);
+                return true;
+            }
+        }
+        return false;
     }
 }

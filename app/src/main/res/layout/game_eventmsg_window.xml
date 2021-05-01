@@ -9,17 +9,24 @@
     android:orientation="vertical"
     android:layout_weight="5">
 
-    <TextView
-        android:id="@+id/msg"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:gravity="center|left"
-        android:text="TextView\nTextView"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+            <TextView
+                android:id="@+id/msg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:gravity="center|left"
+                android:text="TextView\nTextView"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:layout_weight="1"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="18sp"/>
 
+    </ScrollView>
     <Button
         android:id="@+id/turn_end"
         android:layout_width="wrap_content"

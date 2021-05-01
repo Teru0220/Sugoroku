@@ -96,7 +96,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="1"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3">
@@ -256,7 +256,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="1"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -300,7 +300,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="3"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -387,7 +387,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="1"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -431,7 +431,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="3"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -518,7 +518,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="1"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -562,7 +562,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="3"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -649,7 +649,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="1"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -693,7 +693,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="3"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -780,7 +780,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="1"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -824,7 +824,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="3"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -911,7 +911,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="1"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -955,7 +955,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="3"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -1114,7 +1114,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_column="0"
+                                android:layout_column="3"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:weightSum="3"/>
@@ -1156,14 +1156,6 @@
                             </LinearLayout>
                         </TableRow>
                     </TableLayout>
-                    <!--ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/neko1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" /-->
-
                 </FrameLayout>
             </com.example.sugoroku.layout.DiagonalHorizontalScrollView>
         </LinearLayout>

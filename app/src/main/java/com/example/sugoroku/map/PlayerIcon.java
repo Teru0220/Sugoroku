@@ -3,9 +3,7 @@ package com.example.sugoroku.map;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.DrawFilter;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
@@ -18,7 +16,6 @@ import android.widget.ScrollView;
 
 import com.example.sugoroku.R;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -40,17 +37,19 @@ public class PlayerIcon {
     private int musuWidth;
     private int wDisplay;
     private int hDisplay;
-    protected int nowPoint = 0;
-    int[] wPlayerXY = {0, 0};
-    float[] tablePlayerXY = {0.0f, 0.0f};
+    protected int nowPoint = MapActivity.startPoint;//スタート地点を記録
+    int[] wPlayerXY = {0, 0};//iconの絶対座標
+    float[] tablePlayerXY = new float[2];//iconの相対座標
     float[] tableNextMasuXY = {0.0f, 0.0f};
-    int[][] masuCoordinate;
+    float[] iconNowXY = {0.0f,0.0f};
+    float[] iconMoveXY = {0.0f,0.0f};
+    int[][] masuCoordinate;//map内のすべてのマスの絶対座標
     public List<Integer> logList = new ArrayList<>();
     public List<Integer> turnLogList = new ArrayList<>();
 
     private ScrollView scrollView;
     private HorizontalScrollView horizontalScrollView;
-    public float[] scrollNowXY;
+    public float[] scrollNowXY;//スクロール内の現在地の座標
     private int timerCount = 0;
 
     private Context context;
@@ -67,7 +66,11 @@ public class PlayerIcon {
         this.masuCoordinate = masuCoordinate;
         this.scrollView = scrollView;
         this.horizontalScrollView = horizontalScrollView;
-        this.scrollNowXY = new float[]{0.0f, 0.0f};
+
+        wPlayerXY = masuCoordinate[MapActivity.startPoint];
+        calcXY(this.masuCoordinate[0],this.wPlayerXY,this.tablePlayerXY);
+        this.scrollNowXY = new float[]{(wPlayerXY[0] - (wDisplay/6.0f)),
+                (wPlayerXY[1] - (hDisplay/3.0f))};
         this.gameMaster = gameMaster;
         TypedArray Img = context.getResources().obtainTypedArray(R.array.icon);
         for (int i = 0;i<iconImege.length;i++)
@@ -81,10 +84,12 @@ public class PlayerIcon {
         playerImg.setBackgroundColor(Color.TRANSPARENT);
         playerImg.setX(tablePlayerXY[0]);
         playerImg.setY(tablePlayerXY[1]);
-        wPlayerXY = masuCoordinate[0];
+
         FrameLayout.LayoutParams layer1= new FrameLayout.LayoutParams(musuWidth ,musuHeight);
         frameLayout.addView(playerImg,layer1);
-        this.logList.add(nowPoint);
+        scrollNext();
+
+        logList.add(MapActivity.startPoint);
     }
     //生成する矢印を指定
     public void makeArrows(MasuData masuData){
@@ -107,7 +112,6 @@ public class PlayerIcon {
         }else {
             //最後に止まったマスでイベント発生
             turnLogList.clear();
-            turnLogList.add(logList.get(logList.size()-1));
             gameMaster.event(masuData.getEvent(),masuData.getChangeEvent(),masuData.getChangeMoney());
         }
     }
@@ -215,23 +219,25 @@ public class PlayerIcon {
     }
 
     public void iconMove(int newNextMasu,boolean cpu){
-        this.turnLogList.add(nowPoint);
+
         calcXY(wPlayerXY,masuCoordinate[newNextMasu], tableNextMasuXY);
+        iconMoveXY[0] += tableNextMasuXY[0];
+        iconMoveXY[1] += tableNextMasuXY[1];
         TranslateAnimation translateAnimation = new TranslateAnimation(
-                Animation.ABSOLUTE, tablePlayerXY[0],
-                Animation.ABSOLUTE, tableNextMasuXY[0],
-                Animation.ABSOLUTE, tablePlayerXY[1],
-                Animation.ABSOLUTE, tableNextMasuXY[1]
+                Animation.ABSOLUTE, iconNowXY[0],
+                Animation.ABSOLUTE, iconMoveXY[0],
+                Animation.ABSOLUTE, iconNowXY[1],
+                Animation.ABSOLUTE, iconMoveXY[1]
         );
         //スクロール用に移動量を計算,なめらかにスクロールしているようにに見せるためスクロール移動を10分割
-        float[] nowXY = {(tablePlayerXY[0] + wPlayerXY[0] - (wDisplay/5.0f)),
-                (tablePlayerXY[1] + wPlayerXY[1] - (hDisplay/2.0f))};
-        float[] moveXY = {((tableNextMasuXY[0]- tablePlayerXY[0]) / 10.0f),
-                ((tableNextMasuXY[1]- tablePlayerXY[1]) / 10.0f)};
-        float a = tableNextMasuXY[0];
-        float b = tableNextMasuXY[1];
-        tablePlayerXY[0] = a;
-        tablePlayerXY[1] = b;
+        float[] moveXY = {((tableNextMasuXY[0]) / 10.0f),
+                ((tableNextMasuXY[1]) / 10.0f)};
+        //変化量を現在の相対座標と、iconの座標に合計
+        tablePlayerXY[0] += tableNextMasuXY[0];
+        tablePlayerXY[1] += tableNextMasuXY[1];
+        iconNowXY[0] += tableNextMasuXY[0];
+        iconNowXY[1] += tableNextMasuXY[1];
+
         translateAnimation.setDuration(100L);//実行時間ｍｓ
         translateAnimation.setRepeatCount(0);//繰り返し回数
         translateAnimation.setFillAfter(true);//実行後のViewをそのままにするか
@@ -240,36 +246,39 @@ public class PlayerIcon {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                nowXY[0] += moveXY[0];
-                nowXY[1] += moveXY[1];
-                horizontalScrollView.scrollTo((int)Math.ceil(nowXY[0]), 0);
-                scrollView.scrollTo(0, (int)Math.ceil(nowXY[1]));
+                scrollNowXY[0] += moveXY[0];
+                scrollNowXY[1] += moveXY[1];
+                horizontalScrollView.scrollTo((int)Math.ceil(scrollNowXY[0]), 0);
+                scrollView.scrollTo(0, (int)Math.ceil(scrollNowXY[1]));
                 if(timerCount > 10){
                     timerCount = 0;
                     cancel();
-                    scrollNowXY[0] = nowXY[0];
-                    scrollNowXY[1] = nowXY[1];
                 }
                 timerCount++;
             }
         };
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(timerTask,0,10);//10ミリ秒ごとに繰り返し
-
-        nowPoint = newNextMasu;
-        if(turnLogList.size() < 2 ||turnLogList.get(turnLogList.size()-2) != nowPoint) {
+        //動いたあとに動いたあとのマスをログに登録
+        if(turnLogList.size() < 2 ||turnLogList.get(turnLogList.size()-2) != newNextMasu) {
             gameMaster.movePoint--;
-            this.logList.add(nowPoint);
+            this.turnLogList.add(newNextMasu);
+            this.logList.add(newNextMasu);
+            if(logList.size() > 2 && logList.get(logList.size()-3) == newNextMasu){
+                this.logList.remove(logList.size()-1);
+                this.logList.remove(logList.size()-1);
+            }
         }else {
             gameMaster.movePoint++;
             this.turnLogList.remove(turnLogList.size() -1);
-            this.turnLogList.remove(turnLogList.size() -1);
             this.logList.remove(logList.size()-1);
         }
+        nowPoint = newNextMasu;
+        wPlayerXY = masuCoordinate[nowPoint];
         arrowSetTime(gameMaster.masuData[nowPoint],cpu);
     }
 
-    //次のマスの絶対座標と今のマスの絶対座標の差を計算し、相対座標をすすめる値を求める。
+    //次のマスの絶対座標と今のマスの絶対座標の差を計算し、すすめる値を求める。
     private void calcXY(int[] now,int[] next,float[] retn){
         retn[0] = (float) (next[0] - now[0]);
         retn[1] = (float) (next[1] - now[1]);

@@ -23,6 +23,7 @@ public class GameEventMsgWindow extends LinearLayout {
         frame = layout.findViewById(R.id.frame);
         msgView = layout.findViewById(R.id.msg);
         button = layout.findViewById(R.id.turn_end);
+
     }
 
     public void invisible(){

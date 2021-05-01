@@ -57,7 +57,9 @@ public class Roulette extends FrameLayout implements View.OnClickListener{
         if(rotateFlag) {
             rotateFlag = false;
             //ランダムで生成した数値+20回ルーレットを回す。
-            int random = new java.util.Random().nextInt(360) + 1;
+            //int random = new java.util.Random().nextInt(360) + 1;
+            int random = 320;
+            //
             randomTime = random + 1800.0f;
             rotateAnimation1 = new RotateAnimation(
                     0.0f, randomTime,

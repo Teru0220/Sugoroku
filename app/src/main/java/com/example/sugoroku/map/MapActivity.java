@@ -43,6 +43,8 @@ public class MapActivity extends AppCompatActivity {
     protected static int musuWidth;
     protected static int wDisplay;
     protected static int hDisplay;
+    protected static float startX;
+    protected static float startY;
     protected FrameLayout frameLayout;
 
     public static int startPoint = 0;
@@ -87,17 +89,19 @@ public class MapActivity extends AppCompatActivity {
             changeView[i] = findViewById(cText.getResourceId(i,0));
         }
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        readData();
-    }
 
     @Override//layoutが呼び出されてから実行される状態
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         musuHeight = changeView[0].getHeight() * 3;
         musuWidth = changeView[0].getWidth();
+        //データの読み込み
+        readData();
+        //
+        startPoint = 18;
+        //
+        startX = eventView[startPoint].getX();
+        startY = eventView[startPoint].getY();
         //すべてのマスの絶対座標を取得
         for(int i =0;i <masuCoordinate.length;i++){
             eventView[i].getLocationInWindow(masuCoordinate[i]);
@@ -109,7 +113,7 @@ public class MapActivity extends AppCompatActivity {
         if(startFlag) {
             gameMaster = new GameMaster(players, masuData, this, constraintLayout);
             for(int i = 0;i< players.length-playCPU;i++) {
-                //プレイヤーアイコンを作成
+                //プレイヤーアイコンを作成用インスタンス
                 PlayerIcon playerIcon = new PlayerIcon(this, frameLayout,
                         masuCoordinate, scrollView, horizontalScrollView,gameMaster);
                 //プレイヤー情報の入力
