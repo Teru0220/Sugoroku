@@ -3,15 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@drawable/menu_window_back2"
+    android:id="@+id/frame">
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:entries="@array/list"
         android:scrollbarSize="24dp"
         android:spinnerMode="dialog" />
@@ -19,53 +21,69 @@
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp">
 
-       <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/player_name1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー1の名前"
-            android:text="プレイヤー1"/>
+            android:text="プレイヤー1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/player_name2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー2の名前"
-            android:text="プレイヤー2"/>
+            android:text="プレイヤー2" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/player_name3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー3の名前"
-            android:text="プレイヤー3"/>
+            android:text="プレイヤー3" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/player_name4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="プレイヤー4の名前"
-            android:text="プレイヤー4"/>
+            android:text="プレイヤー4" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -97,9 +97,6 @@ public class MapActivity extends AppCompatActivity {
         musuWidth = changeView[0].getWidth();
         //データの読み込み
         readData();
-        //
-        startPoint = 18;
-        //
         startX = eventView[startPoint].getX();
         startY = eventView[startPoint].getY();
         //すべてのマスの絶対座標を取得

@@ -64,6 +64,10 @@
         <item>プレイヤー 1人、CPU 3人</item>
     </string-array>
 
+    <string-array name="masu">
+        <item>26</item>
+    </string-array>
+
     <array name="icon">
         <item>@drawable/neko1</item>
         <item>@drawable/neko2</item>

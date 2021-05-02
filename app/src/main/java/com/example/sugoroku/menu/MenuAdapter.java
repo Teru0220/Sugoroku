@@ -11,7 +11,9 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sugoroku.layout.SettingPopupWindow;
+import com.example.sugoroku.layout.MakeMapWindow;
+import com.example.sugoroku.layout.PlaySettingWindow;
+import com.example.sugoroku.make_map.MakeMapActivity;
 import com.example.sugoroku.map.MapActivity;
 import com.example.sugoroku.R;
 
@@ -21,11 +23,16 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
 
     Context context;//intent用コンテキスト
     private ArrayList<MenuData> list;
+    MakeMapWindow makeMapWindow;
+    PlaySettingWindow playSettingWindow;
     View view;
+    int masuTotal;
 
-    public MenuAdapter(ArrayList<MenuData> list,Context context){
+    public MenuAdapter(ArrayList<MenuData> list, Context context, MakeMapWindow makeMapWindow,PlaySettingWindow playSettingWindow){
         this.context = context;
         this.list = list;
+        this.makeMapWindow = makeMapWindow;
+        this.playSettingWindow = playSettingWindow;
     }
 
     @NonNull
@@ -39,48 +46,96 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
 
     @Override//Viewの内容を交換する。レイアウトマネージャーに起動される
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        //holder.imageView.setImageDrawable();
-        holder.title.setText(list.get(position).getTableName());
-        int masuTotal = list.get(position).getMasuTotal();
-        String s = "総マス数：" + masuTotal;
-        holder.masuTotal.setText(s);
-        if(masuTotal == 26){
-            holder.imageView.setImageResource(R.drawable.map24);
-        }
-        holder.base.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SettingPopupWindow settingPopupWindow = new SettingPopupWindow(context,view);
-                settingPopupWindow.showWindow();
-                Button button = settingPopupWindow.getButton();
-                Spinner spinner = settingPopupWindow.getSpinner();
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int playCPU = 0;
-                        if(spinner.getSelectedItem().toString().equals("プレイヤー 3人、CPU 1人")){
-                            playCPU = 1;
-                        }else if(spinner.getSelectedItem().toString().equals("プレイヤー 2人、CPU 2人")){
-                            playCPU = 2;
-                        }else if(spinner.getSelectedItem().toString().equals("プレイヤー 1人、CPU 3人")){
-                            playCPU = 3;
-                        }
-                        settingPopupWindow.endWindow();
-
-                        Intent map26 = new Intent(context, MapActivity.class);
-                        map26.putExtra("mapName",list.get(position).getTableName());
-                        map26.putExtra("masuTotal",masuTotal);
-                        map26.putExtra("playCPU",playCPU);
-                        map26.putExtra("playerName", settingPopupWindow.getName());
-                        context.startActivity(map26);
-                    }
-                });
+        //settingモード用に新規作成項目を追加
+        if(MenuListActivity.mode.equals("setting") && position == list.size()){
+            holder.title.setText("新しいマップ");
+            masuTotal = 26;
+            String s = " ";
+            holder.masuTotal.setText(s);
+            if(masuTotal == 26){
+                holder.imageView.setImageResource(R.drawable.map24);
             }
-        });
+        }else {
+            holder.title.setText(list.get(position).getTableName());
+            masuTotal = list.get(position).getMasuTotal();
+            String s = "総マス数：" + masuTotal;
+            holder.masuTotal.setText(s);
+            if (masuTotal == 26) {
+                holder.imageView.setImageResource(R.drawable.map24);
+            }
+        }
+        //settingモード用とPlayモード用で設定を変更
+        if(MenuListActivity.mode.equals("play")) {
+            holder.base.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    playSettingWindow.visible();
+                    Button button = playSettingWindow.getButton();
+                    Spinner spinner = playSettingWindow.getSpinner();
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int playCPU = 0;
+                            if (spinner.getSelectedItem().toString().equals("プレイヤー 3人、CPU 1人")) {
+                                playCPU = 1;
+                            } else if (spinner.getSelectedItem().toString().equals("プレイヤー 2人、CPU 2人")) {
+                                playCPU = 2;
+                            } else if (spinner.getSelectedItem().toString().equals("プレイヤー 1人、CPU 3人")) {
+                                playCPU = 3;
+                            }
+                            playSettingWindow.invisible();
+
+                            Intent map26 = new Intent(context, MapActivity.class);
+                            map26.putExtra("mapName", list.get(position).getTableName());
+                            map26.putExtra("masuTotal", masuTotal);
+                            map26.putExtra("playCPU", playCPU);
+                            map26.putExtra("playerName", playSettingWindow.getName());
+                            context.startActivity(map26);
+                        }
+                    });
+                }
+            });
+            //settingモード用のクリックイベント
+        }else {
+            holder.base.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (position == list.size()) {
+                        makeMapWindow.visible();
+                        Button button = makeMapWindow.getButton();
+                        Spinner spinner = makeMapWindow.getSpinner();
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String mapName = makeMapWindow.getMapName();
+                                int masut = Integer.parseInt(spinner.getSelectedItem().toString());
+                                makeMapWindow.invisible();
+                                Intent map26set = new Intent(context, MakeMapActivity.class);
+                                map26set.putExtra("mapName", mapName);
+                                map26set.putExtra("masuTotal", masut);
+                                context.startActivity(map26set);
+                            }
+                        });
+                    }else {
+                        String mapName = list.get(position).getTableName();
+                        int masut = list.get(position).getMasuTotal();
+                        makeMapWindow.invisible();
+                        Intent map26set = new Intent(context, MakeMapActivity.class);
+                        map26set.putExtra("mapName", mapName);
+                        map26set.putExtra("masuTotal", masut);
+                        context.startActivity(map26set);
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if(MenuListActivity.mode.equals("play")) {
+            return list.size();
+        }else {
+            return list.size() +1;
+        }
     }
 }

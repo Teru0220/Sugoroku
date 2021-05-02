@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sugoroku">
-
+        <activity
+            android:name=".make_map.MakeMapActivity"
+            android:label="@string/title_activity_make_map"
+            android:theme="@style/Theme.Sugoroku.NoActionBar"/>
         <activity android:name=".menu.MenuListActivity" />
         <activity android:name=".start.MainActivity">
             <intent-filter>

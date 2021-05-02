@@ -15,10 +15,10 @@ import com.example.sugoroku.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button start;
+    Button start,setting;
     SQLiteDatabase db;
     MapOpenHelper helper;
-
+    Intent menuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +37,24 @@ public class MainActivity extends AppCompatActivity {
         db.close();
 
         start = findViewById(R.id.Stbn);
+        setting = findViewById(R.id.Stbn2);
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent menuList = new Intent(MainActivity.this, MenuListActivity.class);
+                menuList = new Intent(MainActivity.this, MenuListActivity.class);
+                menuList.putExtra("mode","play");
                 startActivity(menuList);
             }
         });
 
-
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuList = new Intent(MainActivity.this, MenuListActivity.class);
+                menuList.putExtra("mode","setting");
+                startActivity(menuList);
+            }
+        });
     }
 }
