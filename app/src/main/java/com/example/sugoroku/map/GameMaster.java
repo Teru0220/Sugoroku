@@ -88,8 +88,8 @@ public class GameMaster {
         rouletteView = new Roulette(context,this,textWindow);
         rouletteView.setX(wDisplay -(wDisplay/2.0f));
         rouletteView.setY((MapActivity.hDisplay) -(wDisplay/1.5f));
-        ConstraintLayout.LayoutParams leyer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 2.5f), (int) Math.ceil(wDisplay / 2.5f));
-        constraintLayout.addView(rouletteView, leyer1);
+        ConstraintLayout.LayoutParams layer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 2.5f), (int) Math.ceil(wDisplay / 2.5f));
+        constraintLayout.addView(rouletteView, layer1);
         rouletteView.setVisibility(View.GONE);
     }
 
@@ -97,8 +97,8 @@ public class GameMaster {
         textWindow = new GameMenuWindow(context);
         textWindow.setX(wDisplay/5.0f * 3);
         textWindow.setY(0);
-        ConstraintLayout.LayoutParams leyer2 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 5.0f * 2), (int) Math.ceil(wDisplay / 5.0f));
-        constraintLayout.addView(textWindow, leyer2);
+        ConstraintLayout.LayoutParams layer2 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 5.0f * 2), (int) Math.ceil(wDisplay / 5.0f));
+        constraintLayout.addView(textWindow, layer2);
         textWindow.invisible();
     }
 
@@ -118,8 +118,8 @@ public class GameMaster {
             }
         });
 
-        ConstraintLayout.LayoutParams leyer3 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 1.5f), (int) Math.ceil(wDisplay / 1.5f));
-        constraintLayout.addView(eventMsgWindow, leyer3);
+        ConstraintLayout.LayoutParams layer3 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 1.5f), (int) Math.ceil(wDisplay / 1.5f));
+        constraintLayout.addView(eventMsgWindow, layer3);
         eventMsgWindow.invisible();
     }
     //矢印を生成する回数を調整する

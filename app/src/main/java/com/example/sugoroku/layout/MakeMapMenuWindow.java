@@ -14,21 +14,22 @@ import android.widget.TextView;
 
 import com.example.sugoroku.R;
 
-public class MakeMapWindow extends LinearLayout {
+public class MakeMapMenuWindow extends LinearLayout {
 
     private Button button;
     private Spinner spinner;
     private String mapName;
     private LinearLayout frame;
+    private TextView textView1;
 
-    public MakeMapWindow(Context context) {
+    public MakeMapMenuWindow(Context context) {
         super(context);
         View layout = LayoutInflater.from(context).inflate(R.layout.make_map_setting,this);
         spinner = layout.findViewById(R.id.spinner);
         button = layout.findViewById(R.id.button);
         frame = layout.findViewById(R.id.frame);
 
-        TextView textView1 = layout.findViewById(R.id.map_name);
+        textView1 = layout.findViewById(R.id.map_name);
         mapName = textView1.getText().toString();
     }
 
@@ -39,6 +40,7 @@ public class MakeMapWindow extends LinearLayout {
         return this.spinner;
     }
     public String getMapName(){
+        mapName = textView1.getText().toString();
         return mapName;
     }
     public void invisible(){

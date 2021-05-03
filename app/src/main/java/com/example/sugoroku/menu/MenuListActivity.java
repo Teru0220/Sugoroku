@@ -10,9 +10,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.example.sugoroku.layout.MakeMapWindow;
+import com.example.sugoroku.layout.MakeMapMenuWindow;
 import com.example.sugoroku.layout.PlaySettingWindow;
 import com.example.sugoroku.map.MapOpenHelper;
 import com.example.sugoroku.R;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 public class MenuListActivity extends AppCompatActivity{
 
     RecyclerView recyclerView;
-    MakeMapWindow makeMapWindow;
+    MakeMapMenuWindow makeMapMenuWindow;
     PlaySettingWindow playSettingWindow;
     ConstraintLayout constraintLayout;
 
@@ -69,7 +70,7 @@ public class MenuListActivity extends AppCompatActivity{
         //SQLからリストを作成
         makeList();
         //画面変移用にthisも引き渡しておく。
-        RecyclerView.Adapter adapter = new MenuAdapter(list,this, makeMapWindow,playSettingWindow);
+        RecyclerView.Adapter adapter = new MenuAdapter(list,this, makeMapMenuWindow,playSettingWindow);
         recyclerView.setAdapter(adapter);
     }
 
@@ -115,19 +116,19 @@ public class MenuListActivity extends AppCompatActivity{
     }
 
     public void makeMapWindow(){
-        makeMapWindow = new MakeMapWindow(this);
-        makeMapWindow.setX(wDisplay/4.0f);
-        makeMapWindow.setY(hDisplay/6.0f);
-        ConstraintLayout.LayoutParams leyer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 2.0f), (int) Math.ceil(wDisplay / 2.5f));
-        constraintLayout.addView(makeMapWindow, leyer1);
-        makeMapWindow.invisible();
+        makeMapMenuWindow = new MakeMapMenuWindow(this);
+        makeMapMenuWindow.setX(wDisplay/4.0f);
+        makeMapMenuWindow.setY(hDisplay/6.0f);
+        ConstraintLayout.LayoutParams leyer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 2.0f), ViewGroup.LayoutParams.WRAP_CONTENT);
+        constraintLayout.addView(makeMapMenuWindow, leyer1);
+        makeMapMenuWindow.invisible();
     }
 
     public void playSettingWindow(){
         playSettingWindow = new PlaySettingWindow(this);
         playSettingWindow.setX(20.0f);
         playSettingWindow.setY(20.0f);
-        ConstraintLayout.LayoutParams leyer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay-40.0f), (int) Math.ceil(hDisplay/2.0f));
+        ConstraintLayout.LayoutParams leyer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay-40.0f), ViewGroup.LayoutParams.WRAP_CONTENT);
         constraintLayout.addView(playSettingWindow,leyer1);
         playSettingWindow.invisible();
     }

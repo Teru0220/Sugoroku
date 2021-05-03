@@ -1,5 +1,6 @@
 package com.example.sugoroku.map;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -33,8 +34,15 @@ public class MapOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE map2db " +
                 "(_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changeMoney INTEGER," +
                 "upNextNumber INTEGER,leftNextNumber INTEGER,downNextNumber INTEGER,rightNextNumber INTEGER)");
-        TestSQL testSQL = new TestSQL(db);
-        testSQL.sqlData();
+
+        for(int i = 0;i<TestSQL.a.length;i++) {
+            insertData(db, TestSQL.a[i], TestSQL.b[i], TestSQL.c[i], TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
+                    TestSQL.downNextNumber[i], TestSQL.rightNextNumber[i], "map1db");
+        }
+        for(int i = 0;i<TestSQL.a.length;i++) {
+            insertData(db, TestSQL.aa[i], TestSQL.b[i], TestSQL.c[i], TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
+                    TestSQL.downNextNumber[i], TestSQL.rightNextNumber[i], "map2db");
+        }
     }
 
     @Override
@@ -48,5 +56,19 @@ public class MapOpenHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db,
                             int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public void insertData(SQLiteDatabase db, String event, String changeEvent, int changeMoney,
+                            int upNextNumber, int leftNextNumber, int downNextNumber, int rightNextNumber, String tableName){
+        ContentValues values = new ContentValues();
+        values.put("event", event);
+        values.put("changeEvent", changeEvent);
+        values.put("changeMoney", changeMoney);
+        values.put("upNextNumber", upNextNumber);
+        values.put("leftNextNumber", leftNextNumber);
+        values.put("downNextNumber", downNextNumber);
+        values.put("rightNextNumber", rightNextNumber);
+
+        db.insert(tableName, null, values);
     }
 }

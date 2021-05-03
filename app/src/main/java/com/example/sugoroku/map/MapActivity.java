@@ -160,7 +160,7 @@ public class MapActivity extends AppCompatActivity {
 
         for(int i = 0; i < masuTotal;i++){
             masuData[i] = new MasuData(cursor.getString(0),cursor.getString(1),cursor.getInt(2),
-                    cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getInt(6),eventView[i]);
+                    cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getInt(6));
             eventView[i].setText(masuData[i].getEvent());
             changeView[i].setText(masuData[i].getChangeEvent());
             if(masuData[i].getEvent().equals("スタート")){this.startPoint = i;}

@@ -4,11 +4,13 @@ import android.widget.TextView;
 
 public class MasuData {
     private String event,changeEvent;
-    private int changeMoney,upNextNumber,leftNextNumber,downNextNumber,rightNextNumber;
+    private int changeMoney = 0;
+    private int upNextNumber,leftNextNumber,downNextNumber,rightNextNumber;
     private TextView textView;
 
+    public MasuData(){}
     public MasuData(String event, String changeEvent, int changeMoney,
-                    int upNextNumber, int leftNextNumber, int downNextNumber, int rightNextNumber,TextView textView){
+                    int upNextNumber, int leftNextNumber, int downNextNumber, int rightNextNumber/*,TextView textView*/){
         setEvent(event);
         setChangeEvent(changeEvent);
         setChangeMoney(changeMoney);
@@ -16,7 +18,7 @@ public class MasuData {
         setLeftNextNumber(leftNextNumber);
         setDownNextNumber(downNextNumber);
         setRightNextNumber(rightNextNumber);
-        setTextView(textView);
+        //setTextView(textView);//eventViewのフィールド存在理由を調査したい。
     }
 
     public String getEvent(){ return this.event; }
@@ -33,6 +35,6 @@ public class MasuData {
     public void setDownNextNumber(int downNextNumber){this.downNextNumber = downNextNumber;}
     public int getRightNextNumber(){ return this.rightNextNumber; }
     public void setRightNextNumber(int rightNextNumber){this.rightNextNumber = rightNextNumber;}
-    public TextView getTextView(){ return this.textView; }
-    public void setTextView(TextView textView){this.textView = textView;}
+    //public TextView getTextView(){ return this.textView; }
+    //public void setTextView(TextView textView){this.textView = textView;}
 }

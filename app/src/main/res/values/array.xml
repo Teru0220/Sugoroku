@@ -57,6 +57,35 @@
         <item>@id/musuC83</item>
     </array>
 
+    <array name="base_masu">
+        <item>@id/a1</item>
+        <item>@id/b1</item>
+        <item>@id/c1</item>
+        <item>@id/d1</item>
+        <item>@id/e1</item>
+        <item>@id/f1</item>
+        <item>@id/g1</item>
+        <item>@id/h1</item>
+        <item>@id/h2</item>
+        <item>@id/h3</item>
+        <item>@id/g3</item>
+        <item>@id/f3</item>
+        <item>@id/e3</item>
+        <item>@id/d3</item>
+        <item>@id/c3</item>
+        <item>@id/b2</item>
+        <item>@id/a3</item>
+        <item>@id/a4</item>
+        <item>@id/a5</item>
+        <item>@id/b5</item>
+        <item>@id/c5</item>
+        <item>@id/d5</item>
+        <item>@id/e5</item>
+        <item>@id/f5</item>
+        <item>@id/g5</item>
+        <item>@id/h5</item>
+    </array>
+
     <string-array name="list">
         <item>プレイヤー 4人、CPU 0人</item>
         <item>プレイヤー 3人、CPU 1人</item>
@@ -66,6 +95,10 @@
 
     <string-array name="masu">
         <item>26</item>
+    </string-array>
+
+    <string-array name="event">
+        <item>"所持金："</item>
     </string-array>
 
     <array name="icon">
