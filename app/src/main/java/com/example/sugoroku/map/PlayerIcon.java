@@ -112,7 +112,13 @@ public class PlayerIcon {
         }else {
             //最後に止まったマスでイベント発生
             turnLogList.clear();
-            gameMaster.event(masuData.getEvent(),masuData.getChangeEvent(),masuData.getChangeMoney());
+            if(!gameMaster.moveEvent) {
+                gameMaster.event(masuData.getEvent(), masuData.getChangeEvent(), masuData.getChangePoint(), masuData.getEventNumber());
+            }else {
+                gameMaster.moveEvent = false;
+                gameMaster.turntable++;
+                gameMaster.orderPlay();
+            }
         }
     }
     //矢印の破棄
@@ -273,8 +279,8 @@ public class PlayerIcon {
             this.turnLogList.remove(turnLogList.size() -1);
             this.logList.remove(logList.size()-1);
         }
-        nowPoint = newNextMasu;
-        wPlayerXY = masuCoordinate[nowPoint];
+        this.nowPoint = newNextMasu;
+        this.wPlayerXY = masuCoordinate[nowPoint];
         arrowSetTime(gameMaster.masuData[nowPoint],cpu);
     }
 

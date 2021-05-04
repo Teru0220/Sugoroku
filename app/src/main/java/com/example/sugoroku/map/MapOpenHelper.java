@@ -29,18 +29,18 @@ public class MapOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // 初期マップテーブル作成
         db.execSQL("CREATE TABLE map1db " +
-                "(_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changeMoney INTEGER," +
+                "(_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changePoint INTEGER,eventNumber INTGET," +
                 "upNextNumber INTEGER,leftNextNumber INTEGER,downNextNumber INTEGER,rightNextNumber INTEGER)");
         db.execSQL("CREATE TABLE map2db " +
-                "(_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changeMoney INTEGER," +
+                "(_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changePoint INTEGER,eventNumber INTGET," +
                 "upNextNumber INTEGER,leftNextNumber INTEGER,downNextNumber INTEGER,rightNextNumber INTEGER)");
 
         for(int i = 0;i<TestSQL.a.length;i++) {
-            insertData(db, TestSQL.a[i], TestSQL.b[i], TestSQL.c[i], TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
+            insertData(db, TestSQL.a[i], TestSQL.b[i], TestSQL.c[i], TestSQL.d[i],TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
                     TestSQL.downNextNumber[i], TestSQL.rightNextNumber[i], "map1db");
         }
         for(int i = 0;i<TestSQL.a.length;i++) {
-            insertData(db, TestSQL.aa[i], TestSQL.b[i], TestSQL.c[i], TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
+            insertData(db, TestSQL.aa[i], TestSQL.b[i], TestSQL.c[i], TestSQL.d[i], TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
                     TestSQL.downNextNumber[i], TestSQL.rightNextNumber[i], "map2db");
         }
     }
@@ -58,12 +58,13 @@ public class MapOpenHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void insertData(SQLiteDatabase db, String event, String changeEvent, int changeMoney,
+    public void insertData(SQLiteDatabase db, String event, String changeEvent, int changePoint,int eventNumber,
                             int upNextNumber, int leftNextNumber, int downNextNumber, int rightNextNumber, String tableName){
         ContentValues values = new ContentValues();
         values.put("event", event);
         values.put("changeEvent", changeEvent);
-        values.put("changeMoney", changeMoney);
+        values.put("changePoint", changePoint);
+        values.put("eventNumber", eventNumber);
         values.put("upNextNumber", upNextNumber);
         values.put("leftNextNumber", leftNextNumber);
         values.put("downNextNumber", downNextNumber);

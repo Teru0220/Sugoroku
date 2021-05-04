@@ -7,8 +7,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,8 +43,7 @@ public class MakeMapActivity extends AppCompatActivity {
     private float currentY;
     private float wDisplay;
     private float hDisplay;
-    private int wMasu;
-    private int hMasu;
+
     private ScrollView scrollView;
     private HorizontalScrollView horizontalScrollView;
     private ConstraintLayout constraintLayout;
@@ -48,7 +51,6 @@ public class MakeMapActivity extends AppCompatActivity {
     private TextView[] eventView;
     private TextView[] changeView;
     private MasuData[] masuData;
-    private int[][] masuCoordinate;
     private int masuTotal;
     private String mapName;
     boolean read;
@@ -66,6 +68,10 @@ public class MakeMapActivity extends AppCompatActivity {
 
     private List<LinearLayout> linearLayout = new ArrayList<>();
 
+    private TypedArray eText;
+    private TypedArray cText;
+    private TypedArray baseMasu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +81,9 @@ public class MakeMapActivity extends AppCompatActivity {
 
         if(masuTotal == 26) {
             setContentView(R.layout.activity_map26);
+            eText = getResources().obtainTypedArray(R.array.event_text_array26);
+            cText = getResources().obtainTypedArray(R.array.change_text_array26);
+            baseMasu = getResources().obtainTypedArray(R.array.base_masu_array26);
         }
         scrollView =  findViewById(R.id.vScroll);
         horizontalScrollView =  findViewById(R.id.hScroll);
@@ -83,29 +92,31 @@ public class MakeMapActivity extends AppCompatActivity {
         eventView = new TextView[masuTotal];
         changeView = new TextView[masuTotal];
         masuData = new MasuData[masuTotal];
-        masuCoordinate = new int[masuTotal][2];
 
-        TypedArray eText = getResources().obtainTypedArray(R.array.event_text_array26);
-        TypedArray cText = getResources().obtainTypedArray(R.array.change_text_array26);
         for(int i = 0;i < eventView.length;i++){
             eventView[i] = findViewById(eText.getResourceId(i,0));
             changeView[i] = findViewById(cText.getResourceId(i,0));
         }
 
-        TypedArray baseMasu = getResources().obtainTypedArray(R.array.base_masu);
-        for(int i = 0; i < masuTotal;i++){
+        for(int i = 0; i < masuTotal-1;i++){
             linearLayout.add(findViewById(baseMasu.getResourceId(i,0)));
-            linearLayout.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(masuEditFlag) {
-                        v.setBackgroundResource(R.drawable.masu_background2);
-                        masuEditView.visible(linearLayout.indexOf((LinearLayout) v));
-                        masuEditView.setEventText(eventView[masuEditView.getNumber()].getText().toString());
-                        masuEditView.setChangeMoney(masuData[masuEditView.getNumber()].getChangeMoney());
+            if(i > 0) {
+                linearLayout.get(i).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (masuEditFlag) {
+                            v.setBackgroundResource(R.drawable.masu_background2);
+                            masuEditView.visible();
+                            masuEditView.setViewNumber(linearLayout.indexOf(v));
+                            masuEditView.setEventText(eventView[masuEditView.getViewNumber()].getText().toString());
+                            masuEditView.setChangePoint(masuData[masuEditView.getViewNumber()].getChangePoint());
+                            int sp = masuData[masuEditView.getViewNumber()].getEventNumber() > 0 ? 1 : 0;
+                            masuEditView.getEventSet().setSelection(sp);
+                            masuEditFlag = false;
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
@@ -122,10 +133,12 @@ public class MakeMapActivity extends AppCompatActivity {
              //初回だけ呼び出したい処理はflagをつけて回避する。
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        wMasu = linearLayout.get(0).getWidth();
-        hMasu = linearLayout.get(0).getHeight();
-        for(int i =0;i <masuCoordinate.length;i++){
-            eventView[i].getLocationInWindow(masuCoordinate[i]);
+        //マスの幅を固定
+        for(int i =0;i <masuTotal;i++){
+            eventView[i].setHeight(eventView[i].getHeight());
+            changeView[i].setHeight(changeView[0].getHeight());
+            eventView[i].setWidth(eventView[i].getWidth());
+            changeView[i].setWidth(changeView[i].getWidth());
         }
         if(startFlag) {
             if (read) {
@@ -149,7 +162,7 @@ public class MakeMapActivity extends AppCompatActivity {
         //コンソールを生成してデータを呼び出す
         Cursor cursor = db.query(
                 mapName,//テーブル（表の名前）
-                new String[] { "event", "changeEvent","changeMoney" ,"upNextNumber" ,"leftNextNumber" ,"downNextNumber" ,"rightNextNumber"},//呼び出す列名
+                new String[] { "event", "changeEvent","changePoint" ,"eventNumber" ,"upNextNumber" ,"leftNextNumber" ,"downNextNumber" ,"rightNextNumber"},//呼び出す列名
                 null,
                 null,
                 null,
@@ -161,9 +174,15 @@ public class MakeMapActivity extends AppCompatActivity {
 
         for(int i = 0; i < masuTotal;i++){
             masuData[i] = new MasuData(cursor.getString(0),cursor.getString(1),cursor.getInt(2),
-                    cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getInt(6));
+                    cursor.getInt(3), cursor.getInt(4),cursor.getInt(5),cursor.getInt(6),
+                    cursor.getInt(7));
             eventView[i].setText(masuData[i].getEvent());
-            changeView[i].setText(masuData[i].getChangeEvent());
+            if(!masuData[i].getEvent().equals("スタート") && !masuData[i].getEvent().equals("ゴール") ) {
+                SpannableStringBuilder changeMsg = new SpannableStringBuilder(masuData[i].getChangeEvent());
+                int color = masuData[i].getChangePoint() > 0 ? Color.BLUE : Color.RED;
+                changeMsg.setSpan(new ForegroundColorSpan(color), 0, changeMsg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                changeView[i].setText(changeMsg);
+            }
 
             cursor.moveToNext();
         }
@@ -174,7 +193,7 @@ public class MakeMapActivity extends AppCompatActivity {
     //新しいテーブルを作成
     public void newTableSql(){
         db.execSQL("CREATE TABLE " + mapName +
-                " (_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changeMoney INTEGER," +
+                " (_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changePoint INTEGER,eventNumber INTGER," +
                 "upNextNumber INTEGER,leftNextNumber INTEGER,downNextNumber INTEGER,rightNextNumber INTEGER)");
     }
 
@@ -230,7 +249,8 @@ public class MakeMapActivity extends AppCompatActivity {
             }
         });
 
-        ConstraintLayout.LayoutParams layer = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 5.0f), (int) Math.ceil(wDisplay / 8.0f));
+        ConstraintLayout.LayoutParams layer =
+                new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 5.0f), (int) Math.ceil(wDisplay / 8.0f));
         constraintLayout.addView(button,layer);
     }
 
@@ -247,7 +267,8 @@ public class MakeMapActivity extends AppCompatActivity {
            }
        });
 
-        ConstraintLayout.LayoutParams layer = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 5.0f), (int) Math.ceil(wDisplay / 8.0f));
+        ConstraintLayout.LayoutParams layer =
+                new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 5.0f), (int) Math.ceil(wDisplay / 8.0f));
         constraintLayout.addView(button2,layer);
     }
 
@@ -267,9 +288,9 @@ public class MakeMapActivity extends AppCompatActivity {
                     newReadMasuDate();
                     newTableSql();
                     for(int i = 0; i < masuTotal;i++) {
-                        helper.insertData(db,masuData[i].getEvent(),masuData[i].getChangeEvent(),masuData[i].getChangeMoney(),
-                                masuData[i].getUpNextNumber(),masuData[i].getLeftNextNumber(),masuData[i].getDownNextNumber(),
-                                masuData[i].getRightNextNumber(),mapName);
+                        helper.insertData(db,masuData[i].getEvent(),masuData[i].getChangeEvent(),masuData[i].getChangePoint(),
+                                masuData[i].getEventNumber(), masuData[i].getUpNextNumber(),masuData[i].getLeftNextNumber(),
+                                masuData[i].getDownNextNumber(), masuData[i].getRightNextNumber(),mapName);
                     }
                     read = false;
                     newMapFlag = true;
@@ -300,21 +321,27 @@ public class MakeMapActivity extends AppCompatActivity {
     public void makeEditBox(){
         masuEditView = new MasuEditView(context);
         masuEditView.setX(wDisplay/10.0f);
-        masuEditView.setY(hDisplay/3.0f);
-        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams((int) (wDisplay/10*8), (int)(hDisplay/3));
+        masuEditView.setY(wDisplay / 7.0f);
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams((int) (wDisplay/10*8), (int)(hDisplay/5*2.5));
         constraintLayout.addView(masuEditView, layoutParams);
-        masuEditFlag = false;
-        masuEditView.getEnd().setOnClickListener(new View.OnClickListener() {
+        masuEditView.getWrite().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                masuData[masuEditView.getNumber()].setEvent(masuEditView.getEventText());
-                masuData[masuEditView.getNumber()].setChangeEvent(masuEditView.getChangeEvent());
-                masuData[masuEditView.getNumber()].setChangeMoney(masuEditView.getChangeMoney());
-                //
-                eventView[masuEditView.getNumber()].setText(masuData[masuEditView.getNumber()].getEvent());
-                changeView[masuEditView.getNumber()].setText(masuData[masuEditView.getNumber()].getChangeEvent());
-                //
-                linearLayout.get(masuEditView.getNumber()).setBackgroundResource(R.drawable.masu_background);
+                masuData[masuEditView.getViewNumber()].setEvent(masuEditView.getEventText());
+                masuData[masuEditView.getViewNumber()].setChangeEvent(masuEditView.getChangeEvent());
+                masuData[masuEditView.getViewNumber()].setChangePoint(masuEditView.getChangeMoney());
+                masuData[masuEditView.getViewNumber()].setEventNumber(masuEditView.getEventNumber());
+                eventView[masuEditView.getViewNumber()].setText(masuData[masuEditView.getViewNumber()].getEvent());
+                changeView[masuEditView.getViewNumber()].setText(masuData[masuEditView.getViewNumber()].getChangeEvent());
+                linearLayout.get(masuEditView.getViewNumber()).setBackgroundResource(R.drawable.masu_background);
+                masuEditFlag = true;
+                masuEditView.invisible();
+            }
+        });
+        masuEditView.getCancel().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.get(masuEditView.getViewNumber()).setBackgroundResource(R.drawable.masu_background);
                 masuEditFlag = true;
                 masuEditView.invisible();
             }

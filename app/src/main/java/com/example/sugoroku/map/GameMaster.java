@@ -5,10 +5,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.TextAppearanceSpan;
-import android.view.Gravity;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -33,12 +30,13 @@ public class GameMaster {
     private ConstraintLayout constraintLayout;
     protected GameMenuWindow textWindow;
     private GameEventMsgWindow eventMsgWindow;
-    private int turntable= 0;
+    protected int turntable= 0;
     protected int turn;
     protected int movePoint = 0;
     private StringBuilder text = new StringBuilder();
     private boolean endFlag = false;
     private boolean backMove = false;
+    public boolean moveEvent = false;
 
     public GameMaster(Player[] players, MasuData[] masuData, Context context,ConstraintLayout constraintLayout){
         this.players = players;
@@ -79,7 +77,7 @@ public class GameMaster {
             if(turn == 0 && players[0].isGoal() && players[1].isGoal()&& players[2].isGoal()&& players[3].isGoal()){
                 gameEng();
             }else {
-                event("ゴールボーナス発生", " ", 0);
+                event("ゴールボーナス発生", " ", 0,0);
             }
         }
     }
@@ -87,7 +85,7 @@ public class GameMaster {
     public void makeRoulette(){
         rouletteView = new Roulette(context,this,textWindow);
         rouletteView.setX(wDisplay -(wDisplay/2.0f));
-        rouletteView.setY((MapActivity.hDisplay) -(wDisplay/1.5f));
+        rouletteView.setY((MapActivity.hDisplay) -(wDisplay/2.0f));
         ConstraintLayout.LayoutParams layer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay / 2.5f), (int) Math.ceil(wDisplay / 2.5f));
         constraintLayout.addView(rouletteView, layer1);
         rouletteView.setVisibility(View.GONE);
@@ -113,7 +111,9 @@ public class GameMaster {
                 if(endFlag && turn == 0){((MapActivity)context).finish();}
                 if(!players[turn].isCpu()) {
                     eventMsgWindow.invisible();
-                    orderPlay();
+                    if(!moveEvent) {
+                        orderPlay();
+                    }
                 }
             }
         });
@@ -145,34 +145,53 @@ public class GameMaster {
                 nextMasu[1] = masuData[players[turn].getIcon().getNowPoint()].getDownNextNumber();
                 nextMasu[0] = masuData[players[turn].getIcon().getNowPoint()].getRightNextNumber();
             }
-            //ゴールできなかったときの処理。logをもどるだけなので改良が必要
+            //ゴールできなかったときの処理。logをもどるだけなので改良が必要.またmoveCPUYesOrNoでturuだった場合そのまま進んでいる。
             if(backMove || !moveCPUYesOrNo(nextMasu)){
                 if(players[turn].getIcon().logList.size() > 1) {
                     players[turn].getIcon().iconMove(players[turn].getIcon().logList.get(players[turn].getIcon().logList.size() - 2), true);
                     backMove = true;
                 }
             }
-        }else {
+            //止まったマスのイベント
+        }else if(!moveEvent){
             players[turn].getIcon().turnLogList.clear();
             event(masuData[players[turn].getIcon().getNowPoint()].getEvent(),
                     masuData[players[turn].getIcon().getNowPoint()].getChangeEvent(),
-                    masuData[players[turn].getIcon().getNowPoint()].getChangeMoney());
+                    masuData[players[turn].getIcon().getNowPoint()].getChangePoint(),
+                    masuData[players[turn].getIcon().getNowPoint()].getEventNumber());
+        }else{
+            players[turn].getIcon().turnLogList.clear();
+            eventMsgWindow.invisible();
+            backMove = false;
+            moveEvent = false;
+            turntable++;
+            orderPlay();
         }
     }
-    //お金が減るイベント
-    public void event(String event,String changeEvent,int money){
+    //イベント
+    public void event(String event,String changeEvent,int eventPoint,int eventNumber){
         if(players[turn].getIcon().nowPoint != MapActivity.goalPoint) {
-            eventWindowShow(event, changeEvent);
-            players[turn].setMoney(players[turn].getMoney() - money);
-            text.delete(0, text.length());
-            text.append(players[turn].getName()).append("\n").append("所持金:").append(players[turn].getMoney());
-            textWindow.setText(text.toString());
-            turntable++;
+            if(eventNumber == 0) {//お金が増減するイベント
+                players[turn].setMoney(players[turn].getMoney() - eventPoint);
+                text.delete(0, text.length());
+                text.append(players[turn].getName()).append("\n").append("所持金:").append(players[turn].getMoney());
+                textWindow.setText(text.toString());
+                turntable++;
+            }else if(eventNumber == 1){//逆走するイベント
+                movePoint = Math.abs(eventPoint);
+                backMove = true;
+                moveEvent = true;
+                moveCPU();
+            }else if(eventNumber == 2){
+                moveEvent = true;
+                move(Math.abs(eventPoint));
+            }
+            eventWindowShow(event, changeEvent,eventPoint);
         }else{
             //ゴールフラグを建てる
             if(!players[turn].isGoal()){players[turn].setGoal(true);}
-            eventWindowShow(event, "ゴールボーナス\n所持金×1.2");
-            players[turn].setMoney((int)(players[turn].getMoney() * 1.2));
+            eventWindowShow(event, "ゴールボーナス\n所持金×1.1",eventPoint);
+            players[turn].setMoney((int)(players[turn].getMoney() * 1.1));
             text.delete(0, text.length());
             text.append(players[turn].getName()).append("\n").append("所持金:").append(players[turn].getMoney());
             textWindow.setText(text.toString());
@@ -181,14 +200,15 @@ public class GameMaster {
 
     }
 
-    //
-    public void eventWindowShow(String event,String changeEvent){
+    //イベントのメッセージウィンドウ表示+CPUのターンエンド
+    public void eventWindowShow(String event,String changeEvent,int eventPoint){
         SpannableStringBuilder windowMsg =new SpannableStringBuilder(changeEvent);
-        windowMsg.setSpan(new ForegroundColorSpan(Color.RED),0,windowMsg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        int color =  eventPoint > 0 ? Color.BLUE : Color.RED;
+        windowMsg.setSpan(new ForegroundColorSpan(color),0,windowMsg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         windowMsg.insert(0,event+"\n\n");
         eventMsgWindow.setMsgView(windowMsg);
         eventMsgWindow.visible();
-        if(players[turn].isCpu()){
+        if(players[turn].isCpu() && !moveEvent){
             Handler handler = new Handler();
             TimerTask task = new TimerTask() {//タイマーに伴う作業を設定。
                 @Override
@@ -230,7 +250,7 @@ public class GameMaster {
         eventMsgWindow.visible();
         endFlag = true;
     }
-
+    //cpuがゴールにつきあたって逆走するか判定する
     public boolean moveCPUYesOrNo(int[] masu){
         for(int i : masu){
             if(!players[turn].getIcon().logList.contains(i) && i > -1) {

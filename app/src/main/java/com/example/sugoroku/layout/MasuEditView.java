@@ -11,11 +11,12 @@ import android.widget.TextView;
 import com.example.sugoroku.R;
 
 public class MasuEditView extends LinearLayout {
-    private TextView eventTextEdit,eventMoneyEdit;
-    private Button end;
+    private TextView eventTextEdit, eventPointEdit;
+    private Button write,cancel;
     private LinearLayout frame;
     private Spinner eventSet;
-    private int number = 1;
+    private int viewNumber = 1;
+    private int eventNumber = 0;
 
     public MasuEditView(Context context) {
         super(context);
@@ -23,9 +24,10 @@ public class MasuEditView extends LinearLayout {
 
         this.frame = layout.findViewById(R.id.frame);
         this.eventTextEdit = layout.findViewById(R.id.editText);
-        this.eventMoneyEdit = layout.findViewById(R.id.editMoney);
+        this.eventPointEdit = layout.findViewById(R.id.editMoney);
         this.eventSet = layout.findViewById(R.id.event_setting);
-        this.end = layout.findViewById(R.id.endbutton);
+        this.write = layout.findViewById(R.id.writebutton);
+        this.cancel = layout.findViewById(R.id.cancelbutton);
 
     }
 
@@ -35,22 +37,54 @@ public class MasuEditView extends LinearLayout {
     public void setEventText(String text){
         this.eventTextEdit.setText(text);
     }
-    public void setChangeMoney(int money){
-        this.eventMoneyEdit.setText("" + money);
+    public void setChangePoint(int point){
+        this.eventPointEdit.setText("" + point);
     }
     public String getChangeEvent(){
-        return (this.eventSet.getSelectedItem().toString() + this.eventMoneyEdit.getText().toString());
+        int p = Integer.parseInt(this.eventPointEdit.getText().toString());
+        String ev = this.eventSet.getSelectedItem().toString();
+        if(ev.equals("所持金：")){
+            setEventNumber(0);
+            if(p > 0){
+                return "所持金が" + p + "ふえた";
+            }else {
+                return "所持金が" + p + "へった";
+            }
+
+        }else {
+            if(p > 0){
+                setEventNumber(2);
+                return p + "マスすすむ";
+            }else {
+                setEventNumber(1);
+                return Math.abs(p) + "マスもどる";
+            }
+        }
     }
-    public int getChangeMoney(){return Integer.parseInt(this.eventMoneyEdit.getText().toString());}
-    public Button getEnd(){return this.end;}
+    public int getChangeMoney(){
+        int point = this.eventPointEdit.getText().toString().equals("")
+                ? 0 :Integer.parseInt(this.eventPointEdit.getText().toString());
+        return point;
+    }
+    public Spinner getEventSet(){ return this.eventSet; }
+    public Button getWrite(){return this.write;}
+    public Button getCancel(){return this.cancel;}
     public void invisible(){
         this.frame.setVisibility(View.GONE);
     }
-    public void visible(int number){
-        this.number = number;
+    public void visible(){
         this.frame.setVisibility(View.VISIBLE);
     }
-    public int getNumber(){
-        return this.number;
+    public int getViewNumber(){
+        return this.viewNumber;
+    }
+    public void setViewNumber(int viewNumber){
+        this.viewNumber = viewNumber;
+    }
+    public int getEventNumber(){
+        return this.eventNumber;
+    }
+    public void setEventNumber(int eventNumber){
+        this.eventNumber = eventNumber;
     }
 }

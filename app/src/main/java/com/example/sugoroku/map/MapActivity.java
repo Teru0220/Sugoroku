@@ -1,6 +1,5 @@
 package com.example.sugoroku.map;
 
-import androidx.annotation.ContentView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -10,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -20,7 +22,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.sugoroku.R;
-import com.example.sugoroku.layout.Roulette;
 
 //　　4/30 ゲーム完了までの流れを完成。CPUはまだ前にしか進めないためゴールできない。全員プレイヤーでゴールの検証が必要。
 public class MapActivity extends AppCompatActivity {
@@ -95,6 +96,12 @@ public class MapActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         musuHeight = changeView[0].getHeight() * 3;
         musuWidth = changeView[0].getWidth();
+        for(int i =0;i <masuTotal;i++){
+            eventView[i].setHeight(eventView[i].getHeight());
+            changeView[i].setHeight(changeView[0].getHeight());
+            eventView[i].setWidth(eventView[i].getWidth());
+            changeView[i].setWidth(changeView[i].getWidth());
+        }
         //データの読み込み
         readData();
         startX = eventView[startPoint].getX();
@@ -148,7 +155,7 @@ public class MapActivity extends AppCompatActivity {
         //コンソールを生成してデータを呼び出す
         Cursor cursor = db.query(
                 getIntent().getStringExtra("mapName"),//テーブル（表の名前）
-                new String[] { "event", "changeEvent","changeMoney" ,"upNextNumber" ,"leftNextNumber" ,"downNextNumber" ,"rightNextNumber"},//呼び出す列名
+                new String[] { "event", "changeEvent","changePoint" ,"eventNumber","upNextNumber" ,"leftNextNumber" ,"downNextNumber" ,"rightNextNumber"},//呼び出す列名
                 null,
                 null,
                 null,
@@ -157,12 +164,19 @@ public class MapActivity extends AppCompatActivity {
         );
         //SQLの読み出し開始
         cursor.moveToFirst();
-
+        //DBからデータを取り出しながらマスにセットしていく
         for(int i = 0; i < masuTotal;i++){
-            masuData[i] = new MasuData(cursor.getString(0),cursor.getString(1),cursor.getInt(2),
-                    cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getInt(6));
+            masuData[i] = new MasuData(cursor.getString(0),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),
+                    cursor.getInt(4),cursor.getInt(5),cursor.getInt(6),cursor.getInt(7));
             eventView[i].setText(masuData[i].getEvent());
-            changeView[i].setText(masuData[i].getChangeEvent());
+            //changeEventは内容で色を変える(スタートとゴールは除外)
+            if(!masuData[i].getEvent().equals("スタート") && !masuData[i].getEvent().equals("ゴール") ) {
+                SpannableStringBuilder changeMsg = new SpannableStringBuilder(masuData[i].getChangeEvent());
+                int color = masuData[i].getChangePoint() > 0 ? Color.BLUE : Color.RED;
+                changeMsg.setSpan(new ForegroundColorSpan(color), 0, changeMsg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                changeView[i].setText(changeMsg);
+            }
+            //スタート位置とゴール位置を設定
             if(masuData[i].getEvent().equals("スタート")){this.startPoint = i;}
             if(masuData[i].getEvent().equals("ゴール")){this.goalPoint = i;}
             cursor.moveToNext();

@@ -53,7 +53,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
             String s = " ";
             holder.masuTotal.setText(s);
             if(masuTotal == 26){
-                holder.imageView.setImageResource(R.drawable.map24);
+                holder.imageView.setImageResource(R.drawable.map26);
             }
         }else {
             holder.title.setText(list.get(position).getTableName());
@@ -61,7 +61,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
             String s = "総マス数：" + masuTotal;
             holder.masuTotal.setText(s);
             if (masuTotal == 26) {
-                holder.imageView.setImageResource(R.drawable.map24);
+                holder.imageView.setImageResource(R.drawable.map26);
             }
         }
         //settingモード用とPlayモード用で設定を変更
