@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -58,6 +59,8 @@ public class MapActivity extends AppCompatActivity {
 
     private GameMaster gameMaster;
 
+    private  MediaPlayer bgm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +86,28 @@ public class MapActivity extends AppCompatActivity {
         horizontalScrollView =  findViewById(R.id.hScroll);
         frameLayout = findViewById(R.id.frame);
 
+
+
         TypedArray eText = getResources().obtainTypedArray(R.array.event_text_array26);
         TypedArray cText = getResources().obtainTypedArray(R.array.change_text_array26);
         for(int i = 0;i < eventView.length;i++){
             eventView[i] = findViewById(eText.getResourceId(i,0));
             changeView[i] = findViewById(cText.getResourceId(i,0));
         }
+    }
+
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        bgm = MediaPlayer.create(this,R.raw.map_bgm);
+        bgm.setLooping(true);
+        bgm.start();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        bgm.release();
     }
 
     @Override//layoutが呼び出されてから実行される状態
@@ -207,4 +226,5 @@ public class MapActivity extends AppCompatActivity {
         }
         return true;
     }
+
 }

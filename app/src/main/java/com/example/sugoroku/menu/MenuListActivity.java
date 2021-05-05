@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class MenuListActivity extends AppCompatActivity{
     MakeMapMenuWindow makeMapMenuWindow;
     PlaySettingWindow playSettingWindow;
     ConstraintLayout constraintLayout;
+
+    MediaPlayer bgm;
 
     private MapOpenHelper helper;//SQLの操作用
     private SQLiteDatabase db;//DBファイル
@@ -131,6 +134,20 @@ public class MenuListActivity extends AppCompatActivity{
         ConstraintLayout.LayoutParams leyer1 = new ConstraintLayout.LayoutParams((int) Math.ceil(wDisplay-40.0f), ViewGroup.LayoutParams.WRAP_CONTENT);
         constraintLayout.addView(playSettingWindow,leyer1);
         playSettingWindow.invisible();
+    }
+
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        bgm = MediaPlayer.create(this,R.raw.menu_bgm);
+        bgm.setLooping(true);
+        bgm.start();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        bgm.release();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.sugoroku.layout;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,6 +31,7 @@ public class Roulette extends FrameLayout implements View.OnClickListener{
 
     private GameMenuWindow textWindow;
     private GameMaster gameMaster;
+    private MediaPlayer rotateSound;
 
     public Roulette(@NonNull Context context,GameMaster gameMaster,GameMenuWindow textWindow) {
         super(context);
@@ -46,6 +48,8 @@ public class Roulette extends FrameLayout implements View.OnClickListener{
         frame = layout.findViewById(R.id.frame);
         frame.setImageResource(R.drawable.roulette_needle);
         frame.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        this.rotateSound = MediaPlayer.create(context,R.raw.roulette_sound);
     }
 
     @Override
@@ -64,10 +68,12 @@ public class Roulette extends FrameLayout implements View.OnClickListener{
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f
             );
-            rotateAnimation1.setDuration((long) randomTime);
+            rotateAnimation1.setDuration(2000);
             rotateAnimation1.setRepeatCount(0);
             rotateAnimation1.setFillAfter(true);
             roulette.startAnimation(rotateAnimation1);
+
+            rotateSoundPlay();
             //乱数からすすめる目を算出
             if (random < 31 || random > 330) {
                 rouletteNumber = 1;
@@ -112,5 +118,10 @@ public class Roulette extends FrameLayout implements View.OnClickListener{
             super.onTouchEvent(event);
         }
         return true;
+    }
+
+    public void rotateSoundPlay(){
+        this.rotateSound.seekTo(0);
+        this.rotateSound.start();
     }
 }

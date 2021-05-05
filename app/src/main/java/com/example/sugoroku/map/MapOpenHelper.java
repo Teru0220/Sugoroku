@@ -31,17 +31,10 @@ public class MapOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE map1db " +
                 "(_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changePoint INTEGER,eventNumber INTGET," +
                 "upNextNumber INTEGER,leftNextNumber INTEGER,downNextNumber INTEGER,rightNextNumber INTEGER)");
-        db.execSQL("CREATE TABLE map2db " +
-                "(_id INTEGER PRIMARY KEY,event TEXT,changeEvent TEXT,changePoint INTEGER,eventNumber INTGET," +
-                "upNextNumber INTEGER,leftNextNumber INTEGER,downNextNumber INTEGER,rightNextNumber INTEGER)");
 
         for(int i = 0;i<TestSQL.a.length;i++) {
             insertData(db, TestSQL.a[i], TestSQL.b[i], TestSQL.c[i], TestSQL.d[i],TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
                     TestSQL.downNextNumber[i], TestSQL.rightNextNumber[i], "map1db");
-        }
-        for(int i = 0;i<TestSQL.a.length;i++) {
-            insertData(db, TestSQL.aa[i], TestSQL.b[i], TestSQL.c[i], TestSQL.d[i], TestSQL.upNextNumber[i], TestSQL.leftNextNumber[i],
-                    TestSQL.downNextNumber[i], TestSQL.rightNextNumber[i], "map2db");
         }
     }
 

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase db;
     MapOpenHelper helper;
     Intent menuList;
+    MediaPlayer bgm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,5 +58,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(menuList);
             }
         });
+    }
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        bgm = MediaPlayer.create(this,R.raw.home_bgm);
+        bgm.setLooping(true);
+        bgm.start();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        bgm.release();
     }
 }

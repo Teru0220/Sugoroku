@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
@@ -55,6 +56,8 @@ public class PlayerIcon {
     private Context context;
     private GameMaster gameMaster;
 
+    private MediaPlayer moveSound;
+
     public PlayerIcon(Context context, FrameLayout frameLayout, int[][] masuCoordinate,
                       ScrollView scrollView,HorizontalScrollView horizontalScrollView,GameMaster gameMaster){
         this.context = context;
@@ -75,6 +78,8 @@ public class PlayerIcon {
         TypedArray Img = context.getResources().obtainTypedArray(R.array.icon);
         for (int i = 0;i<iconImege.length;i++)
         this.iconImege[i] = Img.getDrawable(i);
+
+        this.moveSound = MediaPlayer.create(context,R.raw.move_sound);
     }
 
     public void makePlayerIcon(int imgNumber){
@@ -248,6 +253,7 @@ public class PlayerIcon {
         translateAnimation.setRepeatCount(0);//繰り返し回数
         translateAnimation.setFillAfter(true);//実行後のViewをそのままにするか
         playerImg.startAnimation(translateAnimation);
+        moveSoundPlay();//効果音再生
         //10ミリ秒ごとに10回スクロールを実行
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -298,5 +304,10 @@ public class PlayerIcon {
     public void scrollNext(){
         horizontalScrollView.scrollTo((int)Math.ceil(scrollNowXY[0]),0);
         scrollView.scrollTo(0,(int)Math.ceil(scrollNowXY[1]));
+    }
+
+    public void moveSoundPlay(){
+        moveSound.seekTo(0);
+        moveSound.start();
     }
 }

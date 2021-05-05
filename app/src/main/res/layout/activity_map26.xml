@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/map_back"
     android:id="@+id/map_activity"
     tools:context=".map.MapActivity">
 
@@ -19,7 +18,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/map_back">
 
             <com.example.sugoroku.layout.DiagonalHorizontalScrollView
                 android:id="@+id/hScroll"
@@ -88,7 +88,7 @@
                                     android:layout_marginRight="2dp"
                                     android:layout_marginBottom="2dp"
                                     android:layout_weight="2"
-                                    android:text="@string/change"
+                                    android:text=" "
                                     android:textSize="24sp" />
 
                             </LinearLayout>

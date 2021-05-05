@@ -2,6 +2,7 @@ package com.example.sugoroku.menu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +29,14 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
     View view;
     int masuTotal;
 
+    MediaPlayer buttonSound;
+
     public MenuAdapter(ArrayList<MenuData> list, Context context, MakeMapMenuWindow makeMapMenuWindow, PlaySettingWindow playSettingWindow){
         this.context = context;
         this.list = list;
         this.makeMapMenuWindow = makeMapMenuWindow;
         this.playSettingWindow = playSettingWindow;
+        this.buttonSound = MediaPlayer.create(context,R.raw.button_sound);
     }
 
     @NonNull
@@ -46,6 +50,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
 
     @Override//Viewの内容を交換する。レイアウトマネージャーに起動される
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
+        buttonSoundPlay();
         //settingモード用に新規作成項目を追加
         if(MenuListActivity.mode.equals("setting") && position == list.size()){
             holder.title.setText("新しいマップ");
@@ -69,12 +74,14 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
             holder.base.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    buttonSoundPlay();
                     playSettingWindow.visible();
                     Button button = playSettingWindow.getButton();
                     Spinner spinner = playSettingWindow.getSpinner();
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            buttonSoundPlay();
                             int playCPU = 0;
                             if (spinner.getSelectedItem().toString().equals("プレイヤー 3人、CPU 1人")) {
                                 playCPU = 1;
@@ -100,13 +107,17 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
             holder.base.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    buttonSoundPlay();
                     if (position == list.size()) {
+                        buttonSound.seekTo(0);
+                        buttonSound.start();
                         makeMapMenuWindow.visible();
                         Button button = makeMapMenuWindow.getButton();
                         Spinner spinner = makeMapMenuWindow.getSpinner();
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                buttonSoundPlay();
                                 String mapName = makeMapMenuWindow.getMapName();
                                 int masuTotal = Integer.parseInt(spinner.getSelectedItem().toString());
                                 makeMapMenuWindow.invisible();
@@ -139,5 +150,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
         }else {
             return list.size() +1;
         }
+    }
+
+    public void buttonSoundPlay(){
+        buttonSound.seekTo(0);
+        buttonSound.start();
     }
 }
