@@ -1,5 +1,6 @@
 package com.example.sugoroku.map;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -9,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -155,11 +157,6 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
-   @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        finish();
-        return true;
-    }
 
     //DBからのデータ呼び出し
     public void readData(){
