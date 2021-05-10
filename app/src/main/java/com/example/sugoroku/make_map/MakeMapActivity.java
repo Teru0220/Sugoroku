@@ -23,9 +23,11 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sugoroku.R;
 import com.example.sugoroku.TestSQL;
+import com.example.sugoroku.layout.MasuCopyWindow;
 import com.example.sugoroku.layout.MasuEditView;
 import com.example.sugoroku.layout.SetOrDelWindow;
 import com.example.sugoroku.map.MapOpenHelper;
@@ -67,6 +69,7 @@ public class MakeMapActivity extends AppCompatActivity {
     private boolean startFlag = true;
 
     private List<LinearLayout> linearLayout = new ArrayList<>();
+    private MasuCopyWindow masuCopyWindow;
 
     private TypedArray eText;
     private TypedArray cText;
@@ -116,6 +119,18 @@ public class MakeMapActivity extends AppCompatActivity {
                         }
                     }
                 });
+                linearLayout.get(i).setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (masuEditFlag) {
+                            v.setBackgroundResource(R.drawable.masu_background2);
+                            masuCopyWindow.visible();
+                            masuCopyWindow.setViewNumber(linearLayout.indexOf(v));
+                            masuEditFlag = false;
+                        }
+                        return true;
+                    }
+                });
             }
         }
 
@@ -153,6 +168,7 @@ public class MakeMapActivity extends AppCompatActivity {
             makeDelButton();
             makeSetOrDelWindow();
             makeEditBox();
+            makeMasuCopyWindow();
             startFlag = false;
         }
     }
@@ -327,15 +343,21 @@ public class MakeMapActivity extends AppCompatActivity {
         masuEditView.getWrite().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (masuEditView.getEventSet().getSelectedItem().toString().equals("所持金：") ||
+                        (masuEditView.getChangePoint() > 0 || masuEditView.getChangePoint() > -(masuEditView.getViewNumber()+1))) {
                 masuData[masuEditView.getViewNumber()].setEvent(masuEditView.getEventText());
                 masuData[masuEditView.getViewNumber()].setChangeEvent(masuEditView.getChangeEvent());
-                masuData[masuEditView.getViewNumber()].setChangePoint(masuEditView.getChangeMoney());
+                masuData[masuEditView.getViewNumber()].setChangePoint(masuEditView.getChangePoint());
                 masuData[masuEditView.getViewNumber()].setEventNumber(masuEditView.getEventNumber());
                 eventView[masuEditView.getViewNumber()].setText(masuData[masuEditView.getViewNumber()].getEvent());
                 changeView[masuEditView.getViewNumber()].setText(masuData[masuEditView.getViewNumber()].getChangeEvent());
                 linearLayout.get(masuEditView.getViewNumber()).setBackgroundResource(R.drawable.masu_background);
                 masuEditFlag = true;
                 masuEditView.invisible();
+            } else {
+                Toast toast = Toast.makeText(context, "スタート地点より前に戻ることはできません", Toast.LENGTH_LONG);
+                toast.show();
+            }
             }
         });
         masuEditView.getCancel().setOnClickListener(new View.OnClickListener() {
@@ -347,6 +369,54 @@ public class MakeMapActivity extends AppCompatActivity {
             }
         });
         masuEditView.invisible();
+    }
+    //コピーとペーストのボックスを作成する
+    public void makeMasuCopyWindow(){
+        masuCopyWindow = new MasuCopyWindow(context);
+        masuCopyWindow.setX(wDisplay/3.0f);
+        masuCopyWindow.setY(hDisplay / 3.0f);
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams((int) (wDisplay/3), (int)(wDisplay/3));
+        constraintLayout.addView(masuCopyWindow, layoutParams);
+        masuCopyWindow.getCopy().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                masuCopyWindow.allSet(
+                        masuData[masuCopyWindow.getViewNumber()].getEvent(),
+                        masuData[masuCopyWindow.getViewNumber()].getChangeEvent(),
+                        masuData[masuCopyWindow.getViewNumber()].getChangePoint(),
+                        masuData[masuCopyWindow.getViewNumber()].getEventNumber());
+                linearLayout.get(masuCopyWindow.getViewNumber()).setBackgroundResource(R.drawable.masu_background);
+                masuEditFlag = true;
+                Toast toast = Toast.makeText(context, "コピーしました", Toast.LENGTH_LONG);
+                toast.show();
+                masuCopyWindow.invisible();
+            }
+        });
+        masuCopyWindow.getPaste().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(masuCopyWindow.getEvent() != null) {
+                    masuData[masuCopyWindow.getViewNumber()].setEvent(masuCopyWindow.getEvent());
+                    masuData[masuCopyWindow.getViewNumber()].setChangeEvent(masuCopyWindow.getChangeEvent());
+                    masuData[masuCopyWindow.getViewNumber()].setChangePoint(masuCopyWindow.getChangePoint());
+                    masuData[masuCopyWindow.getViewNumber()].setEventNumber(masuCopyWindow.getEventNumber());
+                    eventView[masuCopyWindow.getViewNumber()].setText(masuData[masuCopyWindow.getViewNumber()].getEvent());
+                    changeView[masuCopyWindow.getViewNumber()].setText(masuData[masuCopyWindow.getViewNumber()].getChangeEvent());
+                    linearLayout.get(masuCopyWindow.getViewNumber()).setBackgroundResource(R.drawable.masu_background);
+                    Toast toast = Toast.makeText(context, "データを貼り付けました", Toast.LENGTH_LONG);
+                    toast.show();
+                    masuCopyWindow.invisible();
+                    masuEditFlag = true;
+                }else {
+                    Toast toast = Toast.makeText(context, "コピーしたデータがありません", Toast.LENGTH_LONG);
+                    toast.show();
+                    linearLayout.get(masuCopyWindow.getViewNumber()).setBackgroundResource(R.drawable.masu_background);
+                    masuCopyWindow.invisible();
+                    masuEditFlag = true;
+                }
+            }
+        });
+        masuCopyWindow.invisible();
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sugoroku.R;
 
@@ -17,9 +18,11 @@ public class MasuEditView extends LinearLayout {
     private Spinner eventSet;
     private int viewNumber = 1;
     private int eventNumber = 0;
+    private Context context;
 
     public MasuEditView(Context context) {
         super(context);
+        this.context = context;
         View layout = LayoutInflater.from(context).inflate(R.layout.edit_box,this);
 
         this.frame = layout.findViewById(R.id.frame);
@@ -52,16 +55,17 @@ public class MasuEditView extends LinearLayout {
             }
 
         }else {
-            if(p > 0){
-                setEventNumber(2);
-                return p + "マスすすむ";
-            }else {
-                setEventNumber(1);
-                return Math.abs(p) + "マスもどる";
-            }
+
+                if (p > 0) {
+                    setEventNumber(2);
+                    return p + "マスすすむ";
+                } else {
+                    setEventNumber(1);
+                    return Math.abs(p) + "マスもどる";
+                }
         }
     }
-    public int getChangeMoney(){
+    public int getChangePoint(){
         int point = this.eventPointEdit.getText().toString().equals("")
                 ? 0 :Integer.parseInt(this.eventPointEdit.getText().toString());
         return point;

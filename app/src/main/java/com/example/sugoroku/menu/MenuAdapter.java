@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +24,8 @@ import java.util.ArrayList;
 public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
 
     Context context;//intent用コンテキスト
-    private ArrayList<MenuData> list;
+    ArrayList<MenuData> list;
+    ArrayList<String> nameList = new ArrayList<>();
     MakeMapMenuWindow makeMapMenuWindow;
     PlaySettingWindow playSettingWindow;
     View view;
@@ -62,6 +64,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
             }
         }else {
             holder.title.setText(list.get(position).getTableName());
+            nameList.add(list.get(position).getTableName());
             masuTotal = list.get(position).getMasuTotal();
             String s = "総マス数：" + masuTotal;
             holder.masuTotal.setText(s);
@@ -119,13 +122,21 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
                             public void onClick(View v) {
                                 buttonSoundPlay();
                                 String mapName = makeMapMenuWindow.getMapName();
-                                int masuTotal = Integer.parseInt(spinner.getSelectedItem().toString());
-                                makeMapMenuWindow.invisible();
-                                Intent map26set = new Intent(context, MakeMapActivity.class);
-                                map26set.putExtra("mapName", mapName);
-                                map26set.putExtra("masuTotal", masuTotal);
-                                map26set.putExtra("read",false);
-                                context.startActivity(map26set);
+                                if(mapName != null && !nameList.contains(mapName)) {
+                                    int masuTotal = Integer.parseInt(spinner.getSelectedItem().toString());
+                                    makeMapMenuWindow.invisible();
+                                    Intent map26set = new Intent(context, MakeMapActivity.class);
+                                    map26set.putExtra("mapName", mapName);
+                                    map26set.putExtra("masuTotal", masuTotal);
+                                    map26set.putExtra("read",false);
+                                    context.startActivity(map26set);
+                                }else {
+                                    String toastMsg = mapName == null ? "マップ名は必ず入力してください":
+                                            "他のマップと同じ名前にはできません";
+                                    Toast toast = Toast.makeText(context,toastMsg,
+                                            Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
                             }
                         });
                     }else {

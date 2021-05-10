@@ -9,12 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sugoroku">
-        <activity
-            android:name=".make_map.MakeMapActivity"
-            android:label="@string/title_activity_make_map"
-            android:theme="@style/Theme.Sugoroku.NoActionBar"/>
-        <activity android:name=".menu.MenuListActivity" />
-        <activity android:name=".start.MainActivity">
+        <activity android:name=".start.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,6 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".map.MapActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".make_map.MakeMapActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".menu.MenuListActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
